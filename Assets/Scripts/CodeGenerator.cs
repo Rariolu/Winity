@@ -26,6 +26,7 @@ public static class CodeGenerator
         isbDesigner.AppendLine("using UnityEngine.SceneManagement;");
         isbDesigner.AppendLine("using UnityEditor;");
         isbDesigner.AppendLine("using UnityEditor.SceneManagement;");
+        isbDesigner.BreakLine();
         isbDesigner.AppendLineFormat("partial class {0}", name.NormaliseString());
         isbDesigner.AppendLine("{");
         isbDesigner.Indents++;
@@ -79,6 +80,7 @@ public static class CodeGenerator
 
         isbFunction.AppendLineFormat("GameObject {0} = new GameObject();",name);
         isbFunction.AppendLineFormat("{0}.name = \"{1}\";",name, gameObject.name);
+        isbFunction.AppendLineFormat("{0}.tag = \"{1}\";", name, gameObject.tag);
        
         SerialiseChildObjects(gameObject, ref isbFunction);
 
@@ -188,23 +190,26 @@ public static class CodeGenerator
         foreach(Component c in gameObject.GetComponents<Component>())
         {
             Type t = c.GetType();
-            string tName = t.ToString();
-            int dotIndex = tName.LastIndexOf('.');
-            if (dotIndex > -1)
+            if (t != typeof(Transform))
             {
-                tName = tName.Substring(dotIndex+1, tName.Length - (dotIndex+1));
+                string tName = t.ToString();
+                int dotIndex = tName.LastIndexOf('.');
+                if (dotIndex > -1)
+                {
+                    tName = tName.Substring(dotIndex + 1, tName.Length - (dotIndex + 1));
+                }
+                int comCount = 0;
+                if (componentTypeCounts.ContainsKey(t))
+                {
+                    comCount = ++componentTypeCounts[t];
+                }
+                else
+                {
+                    componentTypeCounts.Add(t, comCount);
+                }
+                string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
+                isb.AppendLineFormat("{0} {1} = {2}.AddComponent<{0}>();", t, cname, name);
             }
-            int comCount = 0;
-            if (componentTypeCounts.ContainsKey(t))
-            {
-                comCount = ++componentTypeCounts[t];
-            }
-            else
-            {
-                componentTypeCounts.Add(t, comCount);
-            }
-            string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
-            isb.AppendLineFormat("{0} {1} = {2}.AddComponent<{0}>();", t, cname, name);
         }
 
     }
@@ -213,6 +218,7 @@ public static class CodeGenerator
         IndentedStringBuilder isbMain = new IndentedStringBuilder();
         isbMain.AppendLineFormat("using UnityEngine;");
         isbMain.AppendLineFormat("using System.Collections;");
+        isbMain.BreakLine();
         isbMain.AppendLineFormat("public partial class {0}", name);
         isbMain.AppendLine("{");
         isbMain.Indents++;
