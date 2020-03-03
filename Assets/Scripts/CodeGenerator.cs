@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,41 +10,103 @@ using UnityEngine.SceneManagement;
 
 public static class CodeGenerator
 {
-    public static void CreateCustomScene(string mainFileDir, string designerFileDir)
+    public static void CreateCustomScene(string mainFileDir, string designerFileDir, string sceneName)
     {
         Scene currentScene = SceneManager.GetActiveScene();
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
-        string name = currentScene.name;
-        string mainFileText = GenerateClassMainFile(name);
+        string name = sceneName;
+        string mainFileText = GenerateClassMainFile(name.NormaliseString());
+        IndentedStringBuilder isbVariables = new IndentedStringBuilder();
+        isbVariables.Indents = 1;
+        isbVariables.AppendLine("Scene scene;");
+        IndentedStringBuilder isbFunctions = new IndentedStringBuilder();
+        isbFunctions.Indents = 1;
         IndentedStringBuilder isbDesigner = new IndentedStringBuilder();
-        isbDesigner.AppendLineFormat("partial class {0}", name);
+        isbDesigner.AppendLine("using UnityEngine;");
+        isbDesigner.AppendLine("using UnityEngine.SceneManagement;");
+        isbDesigner.AppendLine("using UnityEditor;");
+        isbDesigner.AppendLine("using UnityEditor.SceneManagement;");
+        isbDesigner.AppendLineFormat("partial class {0}", name.NormaliseString());
         isbDesigner.AppendLine("{");
         isbDesigner.Indents++;
         isbDesigner.AppendLine("#region GeneratedCode");
         isbDesigner.AppendLine("private void InitialiseComponent()");
         isbDesigner.AppendLine("{");
         isbDesigner.Indents++;
-        
+        isbDesigner.AppendLine("if (EditorApplication.isPlaying)");
+        isbDesigner.AppendLine("{");
+        isbDesigner.Indents++;
+        isbDesigner.AppendLineFormat("scene = SceneManager.CreateScene(\"{0}\");", name);
+        isbDesigner.Indents--;
+        isbDesigner.AppendLine("}");
+        isbDesigner.AppendLine("else");
+        isbDesigner.AppendLine("{");
+        isbDesigner.Indents++;
+        isbDesigner.AppendLine("scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);");
+        isbDesigner.AppendLineFormat("scene.name = \"{0}\";", name);
+        isbDesigner.Indents--;
+        isbDesigner.AppendLine("}");
+        isbDesigner.AppendLine("SceneManager.SetActiveScene(scene);");
+        foreach (GameObject gameObject in rootObjects)
+        {
+            string function;
+            string functionCall;
+            GenerateGameObjectFunction(gameObject, out function, out functionCall);
+            isbDesigner.AppendLine(functionCall);
+            isbVariables.AppendLineFormat("GameObject {0};", gameObject.name.NormaliseString());
+            isbFunctions.Append(function,false);
+        }
+        isbDesigner.Indents--;
+        isbDesigner.AppendLine("}");
+        isbDesigner.Append(isbFunctions.ToString(),false);
+        isbDesigner.AppendLine("#endregion");
+        isbDesigner.Append(isbVariables.ToString(),false);
+        isbDesigner.Indents--;
+        isbDesigner.AppendLine("}");
+        File.WriteAllText(mainFileDir, mainFileText);
+        File.WriteAllText(designerFileDir, isbDesigner.ToString());
     }
     static void GenerateGameObjectFunction(GameObject gameObject,out string function,out string functionCall)
     {
         IndentedStringBuilder isbFunction = new IndentedStringBuilder();
         isbFunction.Indents = 1;
-        string name = gameObject.name;
+        string name = gameObject.name.NormaliseString();
         string functionName = string.Format("{0}_Init",name);
 
-        
+        isbFunction.AppendLineFormat("private GameObject {0}()", functionName);
+        isbFunction.AppendLine("{");
+        isbFunction.Indents++;
+
+        isbFunction.AppendLine("GameObject gameObject = new GameObject();");
+        isbFunction.AppendLineFormat("gameObject.name = \"{0}\";", gameObject.name);
+
+        SerialiseChildObjects(gameObject, ref isbFunction);
+
+        isbFunction.AppendLine("return gameObject;");
+        isbFunction.Indents--;
+        isbFunction.AppendLine("}");
 
         function = isbFunction.ToString();
         functionCall = string.Format("{0} = {1}();", name, functionName);
     }
-    static void SerialiseChildObjects(GameObject gameObject)
+    static string NormaliseString(this string text)
     {
-        
+        return text.Replace(' ', '_').ToLower();
+    }
+    static void SerialiseChildObjects(GameObject gameObject, ref IndentedStringBuilder isb)
+    {
+        isb.Indents++;
+
         foreach(Transform child in gameObject.transform)
         {
-
+            string name = child.name;
+            isb.AppendLineFormat("GameObject {0} = new GameObject();",name.NormaliseString());
+            isb.AppendLineFormat("{0}.name = \"{0}\";", name);
+            isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", name, gameObject.name);
+            SerialiseChildObjects(child.gameObject, ref isb);
         }
+     
+        isb.Indents--;
     }
     public static void CreateCustomGameObject(GameObject gameObject, out string mainFile, out string designerFile)
     {
@@ -153,4 +216,6 @@ public static class CodeGenerator
         isbMain.AppendLine("}");
         return isbMain.ToString();
     }
+    
 }
+

@@ -65,6 +65,8 @@
     <Compile Include="Assets\Scripts\CodeGenerator.cs" />
     <Compile Include="Assets\Scripts\IndentedStringBuilder.cs" />
     <Compile Include="Assets\Scripts\NewBehaviourScript1.cs" />
+    <Compile Include="Assets\Scripts\Result\Scene.cs" />
+    <Compile Include="Assets\Scripts\Result\Scene.Designer.cs" />
     <Compile Include="Assets\Scripts\temp.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>F:/UnityProjects/2019Unity Projects/GameObjectClassCreationEditorTest/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

@@ -27,12 +27,15 @@ public class IndentedStringBuilder
     {
         Append(string.Format(format+"\n", args));
     }
-    public void Append(string text)
+    public void Append(string text,bool applyIndent = true)
     {
         string inds = "";
-        for(int i = 0; i < Indents; i++)
+        if (applyIndent)
         {
-            inds += "\t";
+            for (int i = 0; i < Indents; i++)
+            {
+                inds += "\t";
+            }
         }
         sb.Append(inds + text);
     }
