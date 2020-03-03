@@ -77,12 +77,12 @@ public static class CodeGenerator
         isbFunction.AppendLine("{");
         isbFunction.Indents++;
 
-        isbFunction.AppendLine("GameObject gameObject = new GameObject();");
-        isbFunction.AppendLineFormat("gameObject.name = \"{0}\";", gameObject.name);
-
+        isbFunction.AppendLineFormat("GameObject {0} = new GameObject();",name);
+        isbFunction.AppendLineFormat("{0}.name = \"{1}\";",name, gameObject.name);
+       
         SerialiseChildObjects(gameObject, ref isbFunction);
 
-        isbFunction.AppendLine("return gameObject;");
+        isbFunction.AppendLineFormat("return {0};",name);
         isbFunction.Indents--;
         isbFunction.AppendLine("}");
 
@@ -91,22 +91,32 @@ public static class CodeGenerator
     }
     static string NormaliseString(this string text)
     {
-        return text.Replace(' ', '_').ToLower();
+        return text.Replace(' ', '_').Replace('(','_').Replace(")","").ToLower();
     }
     static void SerialiseChildObjects(GameObject gameObject, ref IndentedStringBuilder isb)
     {
-        isb.Indents++;
+        AppendGameObject(gameObject, ref isb);
 
-        foreach(Transform child in gameObject.transform)
+        if (gameObject.transform.childCount > 0)
         {
-            string name = child.name;
-            isb.AppendLineFormat("GameObject {0} = new GameObject();",name.NormaliseString());
-            isb.AppendLineFormat("{0}.name = \"{0}\";", name);
-            isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", name, gameObject.name);
-            SerialiseChildObjects(child.gameObject, ref isb);
+            isb.AppendLine("{");
+            isb.Indents++;
+
+            string gameObjectName = gameObject.name.NormaliseString();
+            foreach (Transform child in gameObject.transform)
+            {
+                string name = child.name;
+                string normName = name.NormaliseString();
+                isb.AppendLineFormat("GameObject {0} = new GameObject();", normName);
+                isb.AppendLineFormat("{0}.name = \"{1}\";", normName, name);
+                isb.AppendLineFormat("{0}.tag = \"{1}\";", normName, child.tag);
+                isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", normName, gameObjectName);
+                SerialiseChildObjects(child.gameObject, ref isb);
+            }
+
+            isb.Indents--;
+            isb.AppendLine("}");
         }
-     
-        isb.Indents--;
     }
     public static void CreateCustomGameObject(GameObject gameObject, out string mainFile, out string designerFile)
     {
@@ -172,8 +182,8 @@ public static class CodeGenerator
     }
     public static void AppendGameObject(GameObject gameObject, ref IndentedStringBuilder isb)
     {
-        string name = gameObject.name;
-        isb.AppendLineFormat("{0} = new GameObject();", name);
+        string name = gameObject.name.NormaliseString();
+        //isb.AppendLineFormat("{0} = new GameObject();", name);
         Dictionary<Type, int> componentTypeCounts = new Dictionary<Type, int>();
         foreach(Component c in gameObject.GetComponents<Component>())
         {
@@ -193,7 +203,7 @@ public static class CodeGenerator
             {
                 componentTypeCounts.Add(t, comCount);
             }
-            string cname = string.Format("{0}_{1}_{2}", name, tName, comCount);
+            string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
             isb.AppendLineFormat("{0} {1} = {2}.AddComponent<{0}>();", t, cname, name);
         }
 
