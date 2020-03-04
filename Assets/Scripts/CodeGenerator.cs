@@ -309,9 +309,9 @@ public static class CodeGenerator
             IndentedStringBuilder isbElements = new IndentedStringBuilder();
             for(int i = 0; i < arr.Length; i++)
             {
-                isbElements.AppendLineFormat("{0}{1}", arr.GetValue(i).GetValueString(), i < arr.Length - 1 ? "," : "");
+                isbElements.AppendFormat("{0}{1}", arr.GetValue(i).GetValueString(), i < arr.Length - 1 ? ", " : "");
             }
-            return string.Format("new {0}[]\n{{\n{1}}}", elementType, isbElements.ToString());
+            return string.Format("new {0}[] {{ {1} }}", elementType, isbElements.ToString());
         }
         return value.ToString();
     }

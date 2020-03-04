@@ -42,53 +42,19 @@ partial class phoenix
 		main_camera_camera_0.opaqueSortMode = UnityEngine.Rendering.OpaqueSortMode.Default;
 		main_camera_camera_0.transparencySortMode = UnityEngine.TransparencySortMode.Default;
 		main_camera_camera_0.transparencySortAxis = new Vector3(0f,0f,1f);
-		main_camera_camera_0.depth = -1f;
+		main_camera_camera_0.depth = 0f;
 		main_camera_camera_0.aspect = 1.775956f;
 		main_camera_camera_0.cullingMask = -1;
 		main_camera_camera_0.eventMask = -1;
 		main_camera_camera_0.layerCullSpherical = false;
 		main_camera_camera_0.cameraType = UnityEngine.CameraType.Game;
 		main_camera_camera_0.overrideSceneCullingMask = 0;
-		main_camera_camera_0.layerCullDistances = new System.Single[]
-{
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f
-};
+		main_camera_camera_0.layerCullDistances = new System.Single[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
 		main_camera_camera_0.useOcclusionCulling = true;
 		main_camera_camera_0.cullingMatrix = 0.97528	0.00000	0.00000	0.00000
-0.00000	1.73205	0.00000	-1.73205
-0.00000	0.00000	1.00060	9.40582
-0.00000	0.00000	1.00000	10.00000
+0.00000	1.73205	0.00000	0.00000
+0.00000	0.00000	1.00060	-0.60018
+0.00000	0.00000	1.00000	0.00000
 ;
 		main_camera_camera_0.backgroundColor = RGBA(0.192, 0.302, 0.475, 0.000);
 		main_camera_camera_0.clearFlags = UnityEngine.CameraClearFlags.Skybox;
@@ -103,8 +69,8 @@ partial class phoenix
 		main_camera_camera_0.pixelRect = (x:0.00, y:0.00, width:325.00, height:183.00);
 		main_camera_camera_0.targetDisplay = 0;
 		main_camera_camera_0.worldToCameraMatrix = 1.00000	0.00000	0.00000	0.00000
-0.00000	1.00000	0.00000	-1.00000
-0.00000	0.00000	-1.00000	-10.00000
+0.00000	1.00000	0.00000	0.00000
+0.00000	0.00000	-1.00000	0.00000
 0.00000	0.00000	0.00000	1.00000
 ;
 		main_camera_camera_0.projectionMatrix = 0.97528	0.00000	0.00000	0.00000
@@ -144,10 +110,10 @@ partial class phoenix
 		directional_light.tag = "Untagged";
 		UnityEngine.Light directional_light_light_0 = directional_light.AddComponent<UnityEngine.Light>();
 		/*
-		directional_light_light_0.type = UnityEngine.LightType.Directional;
+		directional_light_light_0.type = UnityEngine.LightType.Point;
 		directional_light_light_0.spotAngle = 30f;
 		directional_light_light_0.innerSpotAngle = 21.80208f;
-		directional_light_light_0.color = RGBA(1.000, 0.957, 0.839, 1.000);
+		directional_light_light_0.color = RGBA(1.000, 1.000, 1.000, 1.000);
 		directional_light_light_0.colorTemperature = 6570f;
 		directional_light_light_0.intensity = 1f;
 		directional_light_light_0.bounceIntensity = 1f;
@@ -170,44 +136,10 @@ partial class phoenix
 		directional_light_light_0.lightShadowCasterMode = UnityEngine.LightShadowCasterMode.Default;
 		directional_light_light_0.shadowRadius = 0f;
 		directional_light_light_0.shadowAngle = 0f;
-		directional_light_light_0.shadows = UnityEngine.LightShadows.Soft;
+		directional_light_light_0.shadows = UnityEngine.LightShadows.None;
 		directional_light_light_0.shadowStrength = 1f;
 		directional_light_light_0.shadowResolution = UnityEngine.Rendering.LightShadowResolution.FromQualitySettings;
-		directional_light_light_0.layerShadowCullDistances = new System.Single[]
-{
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f,
-0f
-};
+		directional_light_light_0.layerShadowCullDistances = new System.Single[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
 		directional_light_light_0.cookieSize = 10f;
 		directional_light_light_0.renderMode = UnityEngine.LightRenderMode.Auto;
 		directional_light_light_0.areaSize = new Vector2(1f,1f);
@@ -236,7 +168,7 @@ partial class phoenix
 			gameobject.tag = "Untagged";
 			gameobject.transform.parent = blep.transform;
 			NewBehaviourScript1 gameobject_newbehaviourscript1_0 = gameobject.AddComponent<NewBehaviourScript1>();
-			
+			/*
 			gameobject_newbehaviourscript1_0.useGUILayout = true;
 			gameobject_newbehaviourscript1_0.runInEditMode = false;
 			gameobject_newbehaviourscript1_0.enabled = true;
@@ -244,13 +176,8 @@ partial class phoenix
 			gameobject_newbehaviourscript1_0.name = "GameObject";
 			gameobject_newbehaviourscript1_0.hideFlags = UnityEngine.HideFlags.None;
 			gameobject_newbehaviourscript1_0.die = "die";
-			gameobject_newbehaviourscript1_0.rir = new System.Int32[]
-{
-3,
-76,
-42
-};
-			
+			gameobject_newbehaviourscript1_0.rir = new System.Int32[] { 3, 76, 42 };
+			*/
 			GameObject gameobject__1 = new GameObject();
 			gameobject__1.name = "GameObject (1)";
 			gameobject__1.tag = "Untagged";

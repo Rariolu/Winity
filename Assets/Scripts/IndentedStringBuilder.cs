@@ -39,6 +39,10 @@ public class IndentedStringBuilder
         }
         sb.Append(inds + text);
     }
+    public void AppendFormat(string format, params object[] args)
+    {
+        Append(string.Format(format, args));
+    }
     public void BreakLine()
     {
         Append("\n",false);
