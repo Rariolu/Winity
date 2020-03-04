@@ -121,68 +121,6 @@ public static class CodeGenerator
             isb.AppendLine("}");
         }
     }
-    public static void CreateCustomGameObject(GameObject gameObject, out string mainFile, out string designerFile)
-    {
-        Dictionary<Type, int> componentTypeCounts = new Dictionary<Type, int>();
-        string name = gameObject.name;
-        mainFile = GenerateClassMainFile(name);
-        IndentedStringBuilder isbDesigner = new IndentedStringBuilder();
-        isbDesigner.AppendLineFormat("partial class {0}", name);
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-        isbDesigner.AppendLine("#region GeneratedCode");
-        isbDesigner.AppendLine("private void InitialiseComponent()");
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-
-        isbDesigner.AppendLine("gameObject = new GameObject();");
-        IndentedStringBuilder isbVariables = new IndentedStringBuilder();
-        isbVariables.Indents = 1;
-        Component[] components = gameObject.GetComponents<Component>();
-        foreach(Component c in components)
-        {
-            Type t = c.GetType();
-            if (t != typeof(Transform))
-            {
-                string tName = t.ToString();
-                int dotIndex = tName.LastIndexOf('.');
-                if (dotIndex > -1)
-                {
-                    tName = tName.Substring(dotIndex + 1, tName.Length - (dotIndex + 1));
-                }
-                int comCount = 0;
-                if (componentTypeCounts.ContainsKey(t))
-                {
-                    comCount = ++componentTypeCounts[t];
-                }
-                else
-                {
-                    componentTypeCounts.Add(t, comCount);
-                }
-                string cname = string.Format("{0}_{1}_{2}", name, tName, comCount);
-                isbDesigner.AppendLineFormat("{0} = gameObject.AddComponent<{1}>();", cname, t);
-                PropertyInfo[] properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (PropertyInfo p in properties)
-                {
-                    try
-                    {
-                        isbDesigner.AppendLineFormat("/*{0}.{1} = {2}*/", cname, p.Name, p.GetValue(c));
-                    }
-                    catch { }
-                }
-                isbVariables.AppendLineFormat("{0} {1};", t, cname);
-            }
-        }
-
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
-        isbDesigner.AppendLine("#endregion");
-        isbDesigner.AppendLine("UnityEngine.GameObject gameObject;");
-        isbDesigner.Append(isbVariables.ToString());
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
-        designerFile = isbDesigner.ToString();
-    }
     public static void AppendGameObject(GameObject gameObject, ref IndentedStringBuilder isb)
     {
         string name = gameObject.name.NormaliseString();
