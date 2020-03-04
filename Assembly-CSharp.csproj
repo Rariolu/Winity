@@ -10,7 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{1A23700D-0AAF-95FE-0F55-0D06B7D380CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -67,7 +68,7 @@
     <Compile Include="Assets\Scripts\NewBehaviourScript1.cs" />
     <Compile Include="Assets\Scripts\Result\Scene.cs" />
     <Compile Include="Assets\Scripts\Result\Scene.Designer.cs" />
-    <Compile Include="Assets\Scripts\temp.cs" />
+    <None Include="Assets\Scripts\CodeGenerationEditor" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>F:/UnityProjects/2019Unity Projects/GameObjectClassCreationEditorTest/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

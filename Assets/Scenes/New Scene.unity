@@ -197,6 +197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   die: die
   rir: 030000004c0000002a000000
+  testObj: {fileID: 2042176832}
+  testObj2: {fileID: 8745525619086555870, guid: d43f335f9c8c99f4d802a51550eb93d7,
+    type: 3}
 --- !u!1 &464533787
 GameObject:
   m_ObjectHideFlags: 0

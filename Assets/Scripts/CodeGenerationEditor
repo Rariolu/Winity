@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
+#if UNITY_EDITOR
+
 public class temp : ScriptableObject
 {
 
@@ -22,3 +24,5 @@ public class temp : ScriptableObject
         new phoenix();
     }
 }
+
+#endif
