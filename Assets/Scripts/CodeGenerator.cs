@@ -209,9 +209,91 @@ public static class CodeGenerator
                 }
                 string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
                 isb.AppendLineFormat("{0} {1} = {2}.AddComponent<{0}>();", t, cname, name);
+                MemberInfo[] members = t.GetMembers();
+                isb.AppendLine("/*");
+                foreach(MemberInfo member in members)
+                {
+                    if (member.IgnoreMember())
+                    {
+                        Debug.LogFormat("{0} is ignored.", member.Name);
+                        continue;
+                    }
+                    try
+                    {
+                        object value = null;
+                        switch (member.MemberType)
+                        {
+                            case MemberTypes.Field:
+                            {
+                                FieldInfo fieldInfo = (FieldInfo)member;
+                                if (!fieldInfo.IsInitOnly)
+                                {
+                                    value = fieldInfo.GetValue(c);
+                                }
+                                break;
+                            }
+                            case MemberTypes.Property:
+                            {
+                                PropertyInfo propertyInfo = (PropertyInfo)member;
+                                if (propertyInfo.CanWrite)
+                                {
+                                    value = propertyInfo.GetValue(c);
+                                }
+                                else
+                                {
+                                    Debug.LogFormat("{0} is readonly.", propertyInfo.Name);
+                                }
+                                break;
+                            }
+                        }
+                        if (value != null)
+                        {
+                            isb.AppendLineFormat("{0}.{1} = {2};", cname, member.Name, value.GetValueString());
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        Debug.LogFormat("ERROR:\n{0};",err);
+                    }
+                }
+                isb.AppendLine("*/");
             }
         }
 
+    }
+    static bool IgnoreMember(this MemberInfo member)
+    {
+        bool isObsolete = member.GetCustomAttributes(typeof(ObsoleteAttribute)).Count() > 0;
+        bool isGameObject = member.Name == "gameObject";
+        bool isTransform = member.Name == "transform";
+        return isObsolete || isGameObject || isTransform;
+    }
+    static string GetValueString(this object value)
+    {
+        if (value is string)
+        {
+            return string.Format("\"{0}\"", value);
+        }
+        if (value is bool)
+        {
+            return value.ToString().ToLower();
+        }
+        if (value is float)
+        {
+            return value + "f";
+        }
+        Type type = value.GetType();
+        if (type.IsEnum)
+        {
+            return string.Format("{0}.{1}", type, value);
+        }
+        if (type.IsArray)
+        {
+            Type elementType = type.GetElementType();
+            string elements = "";
+            Debug.LogFormat("ElementType {0} found.", elementType);   
+        }
+        return value.ToString();
     }
     static string GenerateClassMainFile(string name)
     {
