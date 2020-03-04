@@ -15,4 +15,4 @@ The designer file declares the root GameObjects and a "Scene" instance, which ar
 
 # Attempt to accomplish this
 
-In principle the code for doing this is simple: have a script which creates the code explained above by iterating through all the GameObject in an open scene in the editor, iterating through their components, iterating through their fields and properties, and generating code that declares and initialises them identically.
+In principle the code for doing this is simple: have a script which creates the code explained above by iterating through all the GameObject in an open scene in the editor, iterating through their components, iterating through their fields and properties, and generating code that declares and initialises them identically. Examples of the results can be seen in Assets\Scripts\Result where "Scene.cs" and "Scene.designer.cs" are saved after being created by the editor script.
