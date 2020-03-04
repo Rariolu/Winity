@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -221,30 +222,15 @@ public static class CodeGenerator
                     try
                     {
                         object value = null;
-                        switch (member.MemberType)
+                        if (member.MemberType == MemberTypes.Field)
                         {
-                            case MemberTypes.Field:
-                            {
-                                FieldInfo fieldInfo = (FieldInfo)member;
-                                if (!fieldInfo.IsInitOnly)
-                                {
-                                    value = fieldInfo.GetValue(c);
-                                }
-                                break;
-                            }
-                            case MemberTypes.Property:
-                            {
-                                PropertyInfo propertyInfo = (PropertyInfo)member;
-                                if (propertyInfo.CanWrite)
-                                {
-                                    value = propertyInfo.GetValue(c);
-                                }
-                                else
-                                {
-                                    Debug.LogFormat("{0} is readonly.", propertyInfo.Name);
-                                }
-                                break;
-                            }
+                            FieldInfo fieldInfo = (FieldInfo)member;
+                            value = fieldInfo.GetValue(c);
+                        }
+                        else
+                        {
+                            PropertyInfo propertyInfo = (PropertyInfo)member;
+                            value = propertyInfo.GetValue(c);
                         }
                         if (value != null)
                         {
@@ -263,10 +249,24 @@ public static class CodeGenerator
     }
     static bool IgnoreMember(this MemberInfo member)
     {
-        bool isObsolete = member.GetCustomAttributes(typeof(ObsoleteAttribute)).Count() > 0;
+        if (member.MemberType != MemberTypes.Field && member.MemberType != MemberTypes.Property)
+        {
+            return true;
+        }
         bool isGameObject = member.Name == "gameObject";
-        bool isTransform = member.Name == "transform";
-        return isObsolete || isGameObject || isTransform;
+        bool isTransform = isGameObject || member.Name == "transform";
+        bool isObsolete = isTransform || member.GetCustomAttributes(typeof(ObsoleteAttribute)).Count() > 0;
+        if (isObsolete)
+        {
+            return true;
+        }
+        if (member.MemberType == MemberTypes.Field)
+        {
+            FieldInfo fieldInfo = (FieldInfo)member;
+            return fieldInfo.IsInitOnly || fieldInfo.IsStatic;
+        }
+        PropertyInfo propertyInfo = (PropertyInfo)member;
+        return (!propertyInfo.CanWrite) || propertyInfo.GetAccessors().Any(x => x.IsStatic);
     }
     static string GetValueString(this object value)
     {
@@ -282,6 +282,21 @@ public static class CodeGenerator
         {
             return value + "f";
         }
+        if (value is Vector2)
+        {
+            Vector2 vec2 = (Vector2)value;
+            return string.Format("new Vector2({0},{1})", vec2.x.GetValueString(), vec2.y.GetValueString());
+        }
+        if (value is Vector3)
+        {
+            Vector3 vec3 = (Vector3)value;
+            return string.Format("new Vector3({0},{1},{2})", vec3.x.GetValueString(), vec3.y.GetValueString(),vec3.z.GetValueString());
+        }
+        if (value is Vector4)
+        {
+            Vector4 vec4 = (Vector4)value;
+            return string.Format("new Vector4({0},{1},{2},{3})", vec4.x.GetValueString(), vec4.y.GetValueString(), vec4.z.GetValueString(),vec4.w.GetValueString());
+        }
         Type type = value.GetType();
         if (type.IsEnum)
         {
@@ -290,8 +305,13 @@ public static class CodeGenerator
         if (type.IsArray)
         {
             Type elementType = type.GetElementType();
-            string elements = "";
-            Debug.LogFormat("ElementType {0} found.", elementType);   
+            Array arr = (Array)value;
+            IndentedStringBuilder isbElements = new IndentedStringBuilder();
+            for(int i = 0; i < arr.Length; i++)
+            {
+                isbElements.AppendLineFormat("{0}{1}", arr.GetValue(i).GetValueString(), i < arr.Length - 1 ? "," : "");
+            }
+            return string.Format("new {0}[]\n{{\n{1}}}", elementType, isbElements.ToString());
         }
         return value.ToString();
     }

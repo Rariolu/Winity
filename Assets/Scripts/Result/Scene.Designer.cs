@@ -41,7 +41,7 @@ partial class phoenix
 		main_camera_camera_0.orthographic = false;
 		main_camera_camera_0.opaqueSortMode = UnityEngine.Rendering.OpaqueSortMode.Default;
 		main_camera_camera_0.transparencySortMode = UnityEngine.TransparencySortMode.Default;
-		main_camera_camera_0.transparencySortAxis = (0.0, 0.0, 1.0);
+		main_camera_camera_0.transparencySortAxis = new Vector3(0f,0f,1f);
 		main_camera_camera_0.depth = -1f;
 		main_camera_camera_0.aspect = 1.775956f;
 		main_camera_camera_0.cullingMask = -1;
@@ -49,7 +49,41 @@ partial class phoenix
 		main_camera_camera_0.layerCullSpherical = false;
 		main_camera_camera_0.cameraType = UnityEngine.CameraType.Game;
 		main_camera_camera_0.overrideSceneCullingMask = 0;
-		main_camera_camera_0.layerCullDistances = System.Single[];
+		main_camera_camera_0.layerCullDistances = new System.Single[]
+{
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f
+};
 		main_camera_camera_0.useOcclusionCulling = true;
 		main_camera_camera_0.cullingMatrix = 0.97528	0.00000	0.00000	0.00000
 0.00000	1.73205	0.00000	-1.73205
@@ -61,8 +95,8 @@ partial class phoenix
 		main_camera_camera_0.depthTextureMode = UnityEngine.DepthTextureMode.None;
 		main_camera_camera_0.clearStencilAfterLightingPass = false;
 		main_camera_camera_0.usePhysicalProperties = false;
-		main_camera_camera_0.sensorSize = (36.0, 24.0);
-		main_camera_camera_0.lensShift = (0.0, 0.0);
+		main_camera_camera_0.sensorSize = new Vector2(36f,24f);
+		main_camera_camera_0.lensShift = new Vector2(0f,0f);
 		main_camera_camera_0.focalLength = 50f;
 		main_camera_camera_0.gateFit = UnityEngine.Camera+GateFitMode.Horizontal;
 		main_camera_camera_0.rect = (x:0.00, y:0.00, width:1.00, height:1.00);
@@ -95,8 +129,6 @@ partial class phoenix
 		*/
 		UnityEngine.AudioListener main_camera_audiolistener_0 = main_camera.AddComponent<UnityEngine.AudioListener>();
 		/*
-		main_camera_audiolistener_0.volume = 1f;
-		main_camera_audiolistener_0.pause = false;
 		main_camera_audiolistener_0.velocityUpdateMode = UnityEngine.AudioVelocityUpdateMode.Dynamic;
 		main_camera_audiolistener_0.enabled = true;
 		main_camera_audiolistener_0.tag = "MainCamera";
@@ -120,7 +152,7 @@ partial class phoenix
 		directional_light_light_0.intensity = 1f;
 		directional_light_light_0.bounceIntensity = 1f;
 		directional_light_light_0.useBoundingSphereOverride = false;
-		directional_light_light_0.boundingSphereOverride = (0.0, 0.0, 0.0, 0.0);
+		directional_light_light_0.boundingSphereOverride = new Vector4(0f,0f,0f,0f);
 		directional_light_light_0.shadowCustomResolution = -1;
 		directional_light_light_0.shadowBias = 0.05f;
 		directional_light_light_0.shadowNormalBias = 0.4f;
@@ -141,10 +173,44 @@ partial class phoenix
 		directional_light_light_0.shadows = UnityEngine.LightShadows.Soft;
 		directional_light_light_0.shadowStrength = 1f;
 		directional_light_light_0.shadowResolution = UnityEngine.Rendering.LightShadowResolution.FromQualitySettings;
-		directional_light_light_0.layerShadowCullDistances = System.Single[];
+		directional_light_light_0.layerShadowCullDistances = new System.Single[]
+{
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f,
+0f
+};
 		directional_light_light_0.cookieSize = 10f;
 		directional_light_light_0.renderMode = UnityEngine.LightRenderMode.Auto;
-		directional_light_light_0.areaSize = (1.0, 1.0);
+		directional_light_light_0.areaSize = new Vector2(1f,1f);
 		directional_light_light_0.lightmapBakeType = UnityEngine.LightmapBakeType.Realtime;
 		directional_light_light_0.enabled = true;
 		directional_light_light_0.tag = "Untagged";
@@ -170,7 +236,7 @@ partial class phoenix
 			gameobject.tag = "Untagged";
 			gameobject.transform.parent = blep.transform;
 			NewBehaviourScript1 gameobject_newbehaviourscript1_0 = gameobject.AddComponent<NewBehaviourScript1>();
-			/*
+			
 			gameobject_newbehaviourscript1_0.useGUILayout = true;
 			gameobject_newbehaviourscript1_0.runInEditMode = false;
 			gameobject_newbehaviourscript1_0.enabled = true;
@@ -178,7 +244,13 @@ partial class phoenix
 			gameobject_newbehaviourscript1_0.name = "GameObject";
 			gameobject_newbehaviourscript1_0.hideFlags = UnityEngine.HideFlags.None;
 			gameobject_newbehaviourscript1_0.die = "die";
-			*/
+			gameobject_newbehaviourscript1_0.rir = new System.Int32[]
+{
+3,
+76,
+42
+};
+			
 			GameObject gameobject__1 = new GameObject();
 			gameobject__1.name = "GameObject (1)";
 			gameobject__1.tag = "Untagged";
