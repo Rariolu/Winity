@@ -65,6 +65,9 @@
     <Compile Include="Assets\EditorScript\CodeGenerationEditor.cs" />
     <Compile Include="Assets\EditorScript\CodeGenerator.cs" />
     <Compile Include="Assets\EditorScript\IndentedStringBuilder.cs" />
+    <Compile Include="Assets\ResourceManagement\Monobehaviours\ResourceLoader.cs" />
+    <Compile Include="Assets\ResourceManagement\RescItem.cs" />
+    <Compile Include="Assets\ResourceManagement\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\NewBehaviourScript1.cs" />
     <Compile Include="Assets\Scripts\Result\Scene.cs" />
     <Compile Include="Assets\Scripts\Result\Scene.Designer.cs" />
