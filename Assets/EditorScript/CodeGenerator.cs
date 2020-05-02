@@ -16,7 +16,7 @@ public static class CodeGenerator
         Scene currentScene = SceneManager.GetActiveScene();
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
         string name = sceneName;
-        string mainFileText = GenerateClassMainFile(name.NormaliseString());
+        string mainFileText = string.Format(FileFormats.mainClassFileFormat, name.NormaliseString());
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
         isbVariables.Indents = 1;
         IndentedStringBuilder isbFunctions = new IndentedStringBuilder();
@@ -75,20 +75,9 @@ public static class CodeGenerator
         {
             char[] wordChars = word.ToLower().ToCharArray();
             wordChars[0] = wordChars[0].ToUpper();
-            sb.Append(wordChars.CompileString());
+            sb.Append(new string(wordChars));
         }
         return sb.ToString();
-    }
-
-    static string CompileString(this char[] charArr)
-    {
-        return new string(charArr);
-        //StringBuilder sb = new StringBuilder();
-        //foreach(char c in charArr)
-        //{
-        //    sb.Append(c);
-        //}
-        //return sb.ToString();
     }
 
     public static string ToLowerCamelCase(this string text)
@@ -96,7 +85,7 @@ public static class CodeGenerator
         string upperCamelCase = text.ToUpperCamelCase();
         char[] chars = upperCamelCase.ToCharArray();
         chars[0] = chars[0].ToLower();
-        return chars.CompileString();
+        return new string(chars);
     }
 
     static char ToLower(this char c)
@@ -299,27 +288,6 @@ public static class CodeGenerator
         }
         return value.ToString();
     }
-    static string GenerateClassMainFile(string name)
-    {
-        //IndentedStringBuilder isbMain = new IndentedStringBuilder();
-        //isbMain.AppendLineFormat("using UnityEngine;");
-        //isbMain.AppendLineFormat("using System.Collections;");
-        //isbMain.BreakLine();
-        //isbMain.AppendLineFormat("public partial class {0}", name);
-        //isbMain.AppendLine("{");
-        //isbMain.Indents++;
-        //isbMain.AppendLineFormat("public {0}()", name);
-        //isbMain.AppendLine("{");
-        //isbMain.Indents++;
-        //isbMain.AppendLineFormat("InitialiseComponent();");
-        //isbMain.Indents--;
-        //isbMain.AppendLine("}");
-        //isbMain.Indents--;
-        //isbMain.AppendLine("}");
-        //return isbMain.ToString();
-        return string.Format(FileFormats.mainClassFileFormat, name);
-    }
-    
 }
 
 public class WriterUtil
