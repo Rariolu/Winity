@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public static class FileFormats
+public static class TextFormats
 {
     #region MainClassFileFormat
     public const string mainClassFileFormat = @"

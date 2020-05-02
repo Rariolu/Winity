@@ -16,7 +16,7 @@ public static class CodeGenerator
         Scene currentScene = SceneManager.GetActiveScene();
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
         string name = sceneName;
-        string mainFileText = string.Format(FileFormats.mainClassFileFormat, name.NormaliseString());
+        string mainFileText = string.Format(TextFormats.mainClassFileFormat, name.NormaliseString());
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
         isbVariables.Indents = 1;
         IndentedStringBuilder isbFunctions = new IndentedStringBuilder();
@@ -33,7 +33,7 @@ public static class CodeGenerator
             isbVariables.AppendLineFormat("GameObject {0};", gameObject.name.NormaliseString());
             isbFunctions.Append(function,false);
         }
-        string designerText = string.Format(FileFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbFunctions.ToString(), isbVariables.ToString());
+        string designerText = string.Format(TextFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbFunctions.ToString(), isbVariables.ToString());
         File.WriteAllText(mainFileDir, mainFileText);
         File.WriteAllText(designerFileDir, designerText);//isbDesigner.ToString());
     }
