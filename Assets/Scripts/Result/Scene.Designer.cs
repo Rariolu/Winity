@@ -9,7 +9,7 @@ partial class phoenix
     #region GeneratedCode
 
     private void InitialiseComponent()
-    {//beep
+    {
         if (EditorApplication.isPlaying)
         {
             scene = SceneManager.CreateScene("phoenix");
@@ -233,7 +233,6 @@ partial class phoenix
 		return blep;
 	}
 
-
     #endregion
 
     #region Variables
@@ -242,7 +241,6 @@ partial class phoenix
 	GameObject mainCamera;
 	GameObject directionalLight;
 	GameObject blep;
-
 
     #endregion
 }

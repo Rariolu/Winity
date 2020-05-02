@@ -5,7 +5,7 @@ using System.Collections;
 public partial class phoenix
 {
     public phoenix()
-    {//beep
+    {
         InitialiseComponent();
     }
 }
