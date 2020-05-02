@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\EditorScript\CodeGenerationEditor.cs" />
     <Compile Include="Assets\EditorScript\CodeGenerator.cs" />
+    <Compile Include="Assets\EditorScript\FileFormats.cs" />
     <Compile Include="Assets\EditorScript\IndentedStringBuilder.cs" />
     <Compile Include="Assets\ResourceManagement\Monobehaviours\ResourceLoader.cs" />
     <Compile Include="Assets\ResourceManagement\RescItem.cs" />

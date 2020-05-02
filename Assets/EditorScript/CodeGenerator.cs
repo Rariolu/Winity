@@ -19,55 +19,23 @@ public static class CodeGenerator
         string mainFileText = GenerateClassMainFile(name.NormaliseString());
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
         isbVariables.Indents = 1;
-        isbVariables.AppendLine("Scene scene;");
         IndentedStringBuilder isbFunctions = new IndentedStringBuilder();
         isbFunctions.Indents = 1;
-        IndentedStringBuilder isbDesigner = new IndentedStringBuilder();
-        isbDesigner.AppendLine("using UnityEngine;");
-        isbDesigner.AppendLine("using UnityEngine.SceneManagement;");
-        isbDesigner.AppendLine("using UnityEditor;");
-        isbDesigner.AppendLine("using UnityEditor.SceneManagement;");
-        isbDesigner.BreakLine();
-        isbDesigner.AppendLineFormat("partial class {0}", name.NormaliseString());
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-        isbDesigner.AppendLine("#region GeneratedCode");
-        isbDesigner.AppendLine("private void InitialiseComponent()");
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-        isbDesigner.AppendLine("if (EditorApplication.isPlaying)");
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-        isbDesigner.AppendLineFormat("scene = SceneManager.CreateScene(\"{0}\");", name);
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
-        isbDesigner.AppendLine("else");
-        isbDesigner.AppendLine("{");
-        isbDesigner.Indents++;
-        isbDesigner.AppendLine("scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);");
-        isbDesigner.AppendLineFormat("scene.name = \"{0}\";", name);
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
-        isbDesigner.AppendLine("SceneManager.SetActiveScene(scene);");
+        IndentedStringBuilder isbFunctionCalls = new IndentedStringBuilder();
+        isbFunctionCalls.Indents = 2;
         WriterUtil util = new WriterUtil();
         foreach (GameObject gameObject in rootObjects)
         {
             string function;
             string functionCall;
             GenerateGameObjectFunction(gameObject,util, out function, out functionCall);
-            isbDesigner.AppendLine(functionCall);
+            isbFunctionCalls.AppendLine(functionCall);
             isbVariables.AppendLineFormat("GameObject {0};", gameObject.name.NormaliseString());
             isbFunctions.Append(function,false);
         }
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
-        isbDesigner.Append(isbFunctions.ToString(),false);
-        isbDesigner.AppendLine("#endregion");
-        isbDesigner.Append(isbVariables.ToString(),false);
-        isbDesigner.Indents--;
-        isbDesigner.AppendLine("}");
+        string designerText = string.Format(FileFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbFunctions.ToString(), isbVariables.ToString());
         File.WriteAllText(mainFileDir, mainFileText);
-        File.WriteAllText(designerFileDir, isbDesigner.ToString());
+        File.WriteAllText(designerFileDir, designerText);//isbDesigner.ToString());
     }
     static void GenerateGameObjectFunction(GameObject gameObject,WriterUtil util, out string function,out string functionCall)
     {
@@ -114,12 +82,13 @@ public static class CodeGenerator
 
     static string CompileString(this char[] charArr)
     {
-        StringBuilder sb = new StringBuilder();
-        foreach(char c in charArr)
-        {
-            sb.Append(c);
-        }
-        return sb.ToString();
+        return new string(charArr);
+        //StringBuilder sb = new StringBuilder();
+        //foreach(char c in charArr)
+        //{
+        //    sb.Append(c);
+        //}
+        //return sb.ToString();
     }
 
     public static string ToLowerCamelCase(this string text)
@@ -332,22 +301,23 @@ public static class CodeGenerator
     }
     static string GenerateClassMainFile(string name)
     {
-        IndentedStringBuilder isbMain = new IndentedStringBuilder();
-        isbMain.AppendLineFormat("using UnityEngine;");
-        isbMain.AppendLineFormat("using System.Collections;");
-        isbMain.BreakLine();
-        isbMain.AppendLineFormat("public partial class {0}", name);
-        isbMain.AppendLine("{");
-        isbMain.Indents++;
-        isbMain.AppendLineFormat("public {0}()", name);
-        isbMain.AppendLine("{");
-        isbMain.Indents++;
-        isbMain.AppendLineFormat("InitialiseComponent();");
-        isbMain.Indents--;
-        isbMain.AppendLine("}");
-        isbMain.Indents--;
-        isbMain.AppendLine("}");
-        return isbMain.ToString();
+        //IndentedStringBuilder isbMain = new IndentedStringBuilder();
+        //isbMain.AppendLineFormat("using UnityEngine;");
+        //isbMain.AppendLineFormat("using System.Collections;");
+        //isbMain.BreakLine();
+        //isbMain.AppendLineFormat("public partial class {0}", name);
+        //isbMain.AppendLine("{");
+        //isbMain.Indents++;
+        //isbMain.AppendLineFormat("public {0}()", name);
+        //isbMain.AppendLine("{");
+        //isbMain.Indents++;
+        //isbMain.AppendLineFormat("InitialiseComponent();");
+        //isbMain.Indents--;
+        //isbMain.AppendLine("}");
+        //isbMain.Indents--;
+        //isbMain.AppendLine("}");
+        //return isbMain.ToString();
+        return string.Format(FileFormats.mainClassFileFormat, name);
     }
     
 }

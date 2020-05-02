@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
@@ -5,20 +6,30 @@ using UnityEditor.SceneManagement;
 
 partial class phoenix
 {
-	#region GeneratedCode
-	private void InitialiseComponent()
-	{
-#if UNITY_EDITOR
-        scene = SceneManager.CreateScene("Phoenix");
-#else
-        		scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
-			scene.name = "Phoenix";
-#endif
+    #region GeneratedCode
+
+    private void InitialiseComponent()
+    {//beep
+        if (EditorApplication.isPlaying)
+        {
+            scene = SceneManager.CreateScene("phoenix");
+        }
+        else
+        {
+            scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
+            scene.name = "phoenix";
+        }
         SceneManager.SetActiveScene(scene);
 		mainCamera = mainCamera_Init();
 		directionalLight = directionalLight_Init();
 		blep = blep_Init();
-	}
+
+    }
+
+    #endregion
+
+    #region GameObjectFunctions
+
 	private GameObject mainCamera_Init()
 	{
 		GameObject mainCamera = new GameObject();
@@ -40,7 +51,7 @@ partial class phoenix
 		mainCamera_camera_0.transparencySortMode = UnityEngine.TransparencySortMode.Default;
 		mainCamera_camera_0.transparencySortAxis = new Vector3(0f,0f,1f);
 		mainCamera_camera_0.depth = -1f;
-		mainCamera_camera_0.aspect = 1.772727f;
+		mainCamera_camera_0.aspect = 1.773481f;
 		mainCamera_camera_0.cullingMask = -1;
 		mainCamera_camera_0.eventMask = -1;
 		mainCamera_camera_0.layerCullSpherical = false;
@@ -48,7 +59,7 @@ partial class phoenix
 		mainCamera_camera_0.overrideSceneCullingMask = 0;
 		mainCamera_camera_0.layerCullDistances = new System.Single[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
 		mainCamera_camera_0.useOcclusionCulling = true;
-		mainCamera_camera_0.cullingMatrix = 0.97705	0.00000	0.00000	0.00000
+		mainCamera_camera_0.cullingMatrix = 0.97664	0.00000	0.00000	0.00000
 0.00000	1.73205	0.00000	-1.73205
 0.00000	0.00000	1.00060	9.40582
 0.00000	0.00000	1.00000	10.00000
@@ -63,19 +74,19 @@ partial class phoenix
 		mainCamera_camera_0.focalLength = 50f;
 		mainCamera_camera_0.gateFit = UnityEngine.Camera+GateFitMode.Horizontal;
 		mainCamera_camera_0.rect = (x:0.00, y:0.00, width:1.00, height:1.00);
-		mainCamera_camera_0.pixelRect = (x:0.00, y:0.00, width:312.00, height:176.00);
+		mainCamera_camera_0.pixelRect = (x:0.00, y:0.00, width:321.00, height:181.00);
 		mainCamera_camera_0.targetDisplay = 0;
 		mainCamera_camera_0.worldToCameraMatrix = 1.00000	0.00000	0.00000	0.00000
 0.00000	1.00000	0.00000	-1.00000
 0.00000	0.00000	-1.00000	-10.00000
 0.00000	0.00000	0.00000	1.00000
 ;
-		mainCamera_camera_0.projectionMatrix = 0.97705	0.00000	0.00000	0.00000
+		mainCamera_camera_0.projectionMatrix = 0.97664	0.00000	0.00000	0.00000
 0.00000	1.73205	0.00000	0.00000
 0.00000	0.00000	-1.00060	-0.60018
 0.00000	0.00000	-1.00000	0.00000
 ;
-		mainCamera_camera_0.nonJitteredProjectionMatrix = 0.97705	0.00000	0.00000	0.00000
+		mainCamera_camera_0.nonJitteredProjectionMatrix = 0.97664	0.00000	0.00000	0.00000
 0.00000	1.73205	0.00000	0.00000
 0.00000	0.00000	-1.00060	-0.60018
 0.00000	0.00000	-1.00000	0.00000
@@ -221,9 +232,17 @@ partial class phoenix
 		}
 		return blep;
 	}
-#endregion
-	Scene scene;
+
+
+    #endregion
+
+    #region Variables
+
+    Scene scene;
 	GameObject mainCamera;
 	GameObject directionalLight;
 	GameObject blep;
+
+
+    #endregion
 }
