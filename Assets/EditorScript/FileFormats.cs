@@ -53,14 +53,12 @@ partial class {0}
     #region GameObjectFunctions
 
 {2}
-
     #endregion
 
     #region Variables
 
     Scene scene;
 {3}
-
     #endregion
 }}
 ";
