@@ -64,7 +64,6 @@ public static class CodeGenerator
     public static string NormaliseString(this string text)
     {
         return text.Replace('(', '_').Replace(')', '_').ToLowerCamelCase();
-        //return text.Replace(' ', '_').Replace('(','_').Replace(")","").ToLower();
     }
 
     public static string ToUpperCamelCase(this string text)

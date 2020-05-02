@@ -14,7 +14,7 @@ using System.Collections;
 public partial class {0}
 {{
     public {0}()
-    {{//beep
+    {{
         InitialiseComponent();
     }}
 }}
@@ -34,7 +34,7 @@ partial class {0}
     #region GeneratedCode
 
     private void InitialiseComponent()
-    {{//beep
+    {{
         if (EditorApplication.isPlaying)
         {{
             scene = SceneManager.CreateScene(""{0}"");
