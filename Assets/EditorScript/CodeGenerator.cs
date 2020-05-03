@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UObject = UnityEngine.Object;
 
 public static class CodeGenerator
 {
@@ -17,13 +18,26 @@ public static class CodeGenerator
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
         string name = sceneName;
         string mainFileText = string.Format(TextFormats.mainClassFileFormat, name.NormaliseString());
+
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
         isbVariables.Indents = 1;
+
         IndentedStringBuilder isbFunctions = new IndentedStringBuilder();
         isbFunctions.Indents = 1;
+
         IndentedStringBuilder isbFunctionCalls = new IndentedStringBuilder();
         isbFunctionCalls.Indents = 2;
+
         WriterUtil util = new WriterUtil();
+
+        IndentedStringBuilder isbObjectMap = new IndentedStringBuilder();
+        isbObjectMap.Indents = 2;
+        
+        foreach(GameObject gameObject in rootObjects)
+        {
+            AppendGameObjectsToMap(gameObject, isbObjectMap);
+        }
+
         foreach (GameObject gameObject in rootObjects)
         {
             string function;
@@ -33,10 +47,29 @@ public static class CodeGenerator
             isbVariables.AppendLineFormat("GameObject {0};", gameObject.name.NormaliseString());
             isbFunctions.Append(function,false);
         }
-        string designerText = string.Format(TextFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbFunctions.ToString(), isbVariables.ToString());
+        string designerText = string.Format(TextFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbObjectMap.ToString(),  isbFunctions.ToString(), isbVariables.ToString());
         File.WriteAllText(mainFileDir, mainFileText);
         File.WriteAllText(designerFileDir, designerText);//isbDesigner.ToString());
     }
+
+    static void AppendGameObjectsToMap(GameObject gameObject, IndentedStringBuilder isbObjectMap)
+    {
+        isbObjectMap.AppendLineFormat("GameObject gameObject{0} = new GameObject();", gameObject.GetInstanceID());
+        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},gameObject{0});", gameObject.GetInstanceID());
+        Component[] components = gameObject.GetComponents<Component>();
+        foreach(Component component in components)
+        {
+            Type cType = component.GetType();
+            isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), component.GetInstanceID(), gameObject.GetInstanceID());
+            isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{0});", component.GetInstanceID());
+        }
+        
+        foreach(Transform child in gameObject.transform)
+        {
+            AppendGameObjectsToMap(child.gameObject, isbObjectMap);
+        }
+    }
+
     static void GenerateGameObjectFunction(GameObject gameObject,WriterUtil util, out string function,out string functionCall)
     {
         IndentedStringBuilder isbFunction = new IndentedStringBuilder();
@@ -48,7 +81,8 @@ public static class CodeGenerator
         isbFunction.AppendLine("{");
         isbFunction.Indents++;
 
-        isbFunction.AppendLineFormat("GameObject {0} = new GameObject();",name);
+        isbFunction.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", name, gameObject.GetInstanceID());
+        //isbFunction.AppendLineFormat("GameObject {0} = new GameObject();",name);
         isbFunction.AppendLineFormat("{0}.name = \"{1}\";",name, gameObject.name);
         isbFunction.AppendLineFormat("{0}.tag = \"{1}\";", name, gameObject.tag);
        
@@ -111,7 +145,8 @@ public static class CodeGenerator
             {
                 string name = child.name;
                 string normName = name.NormaliseString();
-                isb.AppendLineFormat("GameObject {0} = new GameObject();", normName);
+                isb.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", normName, gameObject.GetInstanceID());
+                //isb.AppendLineFormat("GameObject {0} = new GameObject();", normName);
                 isb.AppendLineFormat("{0}.name = \"{1}\";", normName, name);
                 isb.AppendLineFormat("{0}.tag = \"{1}\";", normName, child.tag);
                 isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", normName, gameObjectName);
@@ -136,9 +171,10 @@ public static class CodeGenerator
                 string tName = GetTypeName(t);
                 int comCount = util.GetTypeCount(t);
                 string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
-                isb.AppendLineFormat("{0} {1} = {2}.AddComponent<{0}>();", t, cname, name);
+                //isb.AppendLineFormat("{0} {1} = {2}.GetComponent<{0}>();", t, cname, name);
+                isb.AppendLineFormat("{0} {1} = (unityObjectMap[{2}] as {0});", t, cname, c.GetInstanceID());
                 MemberInfo[] members = t.GetMembers();
-                isb.AppendLine("/*");
+                //isb.AppendLine("/*");
                 foreach(MemberInfo member in members)
                 {
                     if (member.IgnoreMember())
@@ -169,7 +205,7 @@ public static class CodeGenerator
                         Debug.LogFormat("ERROR:\n{0};",err);
                     }
                 }
-                isb.AppendLine("*/");
+                //isb.AppendLine("*/");
             }
         }
 
@@ -235,6 +271,10 @@ public static class CodeGenerator
     }
     static string GetValueString(this object value,WriterUtil util)
     {
+        if (value is long || value is int || value is short)
+        {
+            return value.ToString();
+        }
         if (value is string)
         {
             return string.Format("\"{0}\"", value);
@@ -262,17 +302,45 @@ public static class CodeGenerator
             Vector4 vec4 = (Vector4)value;
             return string.Format("new Vector4({0},{1},{2},{3})", vec4.x.GetValueString(util), vec4.y.GetValueString(util), vec4.z.GetValueString(util),vec4.w.GetValueString(util));
         }
+        if (value is Matrix4x4)
+        {
+            Matrix4x4 mat = (Matrix4x4)value;
+
+            return string.Format("new Matrix4x4({0},{1},{2},{3})", mat.GetColumn(0).GetValueString(util), mat.GetColumn(1).GetValueString(util), mat.GetColumn(2).GetValueString(util), mat.GetColumn(3).GetValueString(util));
+        }
+        if (value is Rect)
+        {
+            Rect rect = (Rect)value;
+
+            return string.Format("new Rect({0},{1},{2},{3})", rect.x.GetValueString(util), rect.y.GetValueString(util), rect.width.GetValueString(util), rect.height.GetValueString(util));
+        }
+        if (value is Scene)
+        {
+            return "scene";
+        }
+        if (value is Color)
+        {
+            Color colour = (Color)value;
+
+            return string.Format("new Color({0},{1},{2},{3})", colour.r.GetValueString(util), colour.g.GetValueString(util), colour.b.GetValueString(util), colour.a.GetValueString(util));
+        }
         Type type = value.GetType();
         if (type.IsEnum)
         {
-            return string.Format("{0}.{1}", type, value);
+            return string.Format("{0}.{1}", type.ToString().Replace('+','.'), value);
         }
         if (type.IsClass)
         {
-            if (value is Component)
+            if (value == null)
             {
-                return GetComponentName(value as Component, util);
+                return "null";
             }
+        }
+        if (value is UObject)
+        {
+            Debug.Log("fjriofjroijf");
+            UObject obj = value as UObject;
+            return string.Format("(unityObjectMap[{0}] as {1})", obj.GetInstanceID(), type.ToString());
         }
         if (type.IsArray)
         {
@@ -285,7 +353,8 @@ public static class CodeGenerator
             }
             return string.Format("new {0}[] {{ {1} }}", elementType, isbElements.ToString());
         }
-        return value.ToString();
+        return string.Format("default({0})", type);
+        //return value.ToString();
     }
 }
 

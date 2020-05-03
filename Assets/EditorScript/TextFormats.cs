@@ -24,6 +24,7 @@ public partial class {0}
 
     #region DesignerClassFileFormat
     public const string designerClassFileFormat = @"
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
@@ -45,20 +46,34 @@ partial class {0}
             scene.name = ""{0}"";
         }}
         SceneManager.SetActiveScene(scene);
+
+        unityObjectMap = new Dictionary<int, Object>();
+        MapObjects();
+      
 {1}
+    }}
+
+    #endregion
+
+    #region ObjectMapping
+
+    void MapObjects()
+    {{
+{2}
     }}
 
     #endregion
 
     #region GameObjectFunctions
 
-{2}
+{3}
     #endregion
 
     #region Variables
 
     Scene scene;
-{3}
+    Dictionary<int,Object> unityObjectMap;
+{4}
     #endregion
 }}
 ";
