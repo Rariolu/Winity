@@ -36,15 +36,21 @@ partial class {0}
 
     private void InitialiseComponent()
     {{
+#if UNITY_EDITOR
         if (EditorApplication.isPlaying)
         {{
             scene = SceneManager.CreateScene(""{0}"");
+            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
         }}
         else
         {{
             scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
             scene.name = ""{0}"";
         }}
+#else
+        scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
+        scene.name = ""{0}"";
+#endif
         SceneManager.SetActiveScene(scene);
 
         unityObjectMap = new Dictionary<int, Object>();
