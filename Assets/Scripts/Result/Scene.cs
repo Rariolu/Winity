@@ -2,9 +2,9 @@
 using UnityEngine;
 using System.Collections;
 
-public partial class phoenix
+public partial class newScene
 {
-    public phoenix()
+    public newScene()
     {
         InitialiseComponent();
     }

@@ -12,11 +12,12 @@ using UObject = UnityEngine.Object;
 
 public static class CodeGenerator
 {
-    public static void CreateCustomScene(string mainFileDir, string designerFileDir, string sceneName)
+    public static void CreateCustomScene(string mainFileDir, string designerFileDir)
     {
         Scene currentScene = SceneManager.GetActiveScene();
+        string name = currentScene.name;
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
-        string name = sceneName;
+        //string name = sceneName;
         string mainFileText = string.Format(TextFormats.mainClassFileFormat, name.NormaliseString());
 
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
@@ -59,22 +60,24 @@ public static class CodeGenerator
 
         isbObjectMap.AppendLineFormat("//{0}", gameObject.name);
         isbObjectMap.AppendLineFormat("GameObject gameObject{0} = new GameObject();", normInst);
-        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},gameObject{0});", instID,normInst);
+        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0}, gameObject{1});", instID, normInst);
 
         int transformInst = gameObject.transform.GetInstanceID();
         string normTranInst = transformInst.Normalise();
 
         isbObjectMap.AppendLineFormat("Transform transform{0} = gameObject{1}.transform;", normTranInst, normInst);
-        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},transform{0});", transformInst,normTranInst);
+        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},transform{1});", transformInst,normTranInst);
 
         Component[] components = gameObject.GetComponents<Component>();
         foreach(Component component in components)
         {
             if (!(component is Transform))
             {
+                int comInst = component.GetInstanceID();
+                string comInstNorm = comInst.Normalise();
                 Type cType = component.GetType();
-                isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), component.GetInstanceID(), instID);
-                isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{0});", component.GetInstanceID());
+                isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), comInstNorm, normInst);
+                isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{1});", comInst ,comInstNorm);
             }
         }
 

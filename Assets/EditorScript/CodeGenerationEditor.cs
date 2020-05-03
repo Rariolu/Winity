@@ -14,13 +14,13 @@ public class temp : ScriptableObject
     {
         string mainDir = "Assets\\Scripts\\Result\\Scene.cs";
         string designerDir = "Assets\\Scripts\\Result\\Scene.Designer.cs";
-        CodeGenerator.CreateCustomScene(mainDir, designerDir,"Phoenix");
+        CodeGenerator.CreateCustomScene(mainDir, designerDir);//,"Phoenix");
     }
 
     [MenuItem("Tools/CodeGenTest/Test")]
     static void Test()
     {
-        new phoenix();
+        new newScene();//phoenix();
     }
 
     [MenuItem("Tools/StringStuff/Test")]
