@@ -11,9 +11,10 @@ public static class Util
         return obj.ToString().NormaliseString();
     }
     
-    public static string NormaliseString(this string text)
+    public static string NormaliseString(this string text, bool lowerCamel = true)
     {
-        return text.Replace('(', '_').Replace(')', '_').Replace('-','_').ToLowerCamelCase();
+        string replacedChars = text.Replace('(', '_').Replace(')', '_').Replace('-', '_');
+        return lowerCamel ? replacedChars.ToLowerCamelCase() : replacedChars.ToUpperCamelCase();
     }
 
     public static string ToUpperCamelCase(this string text)
