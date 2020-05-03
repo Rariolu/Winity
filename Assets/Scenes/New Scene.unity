@@ -198,7 +198,12 @@ MonoBehaviour:
   die: die
   rir: 030000004c0000002a000000
   testObj: {fileID: 2042176832}
-  testObj2: {fileID: 1766143745}
+  tempStruct:
+    b: 5
+    c: 9
+  tempClass:
+    c: 9
+    d: 43
 --- !u!1 &464533787
 GameObject:
   m_ObjectHideFlags: 0
