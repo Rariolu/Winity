@@ -642,10 +642,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: a56bed68-f9c4-4508-818a-f27c0e0a2e80
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: GameObjectClassCreationEditorTest
-  organizationId: rariolu
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
