@@ -11,21 +11,25 @@ using UObject = UnityEngine.Object;
 
 namespace WinformsUnity
 {
+    /// <summary>
+    /// The class which manages the scene's initialisation
+    /// and resource management.
+    /// </summary>
     public abstract class BaseScene
     {
-        public BaseScene()
+        public BaseScene(string sceneName)
         {
 #if UNITY_EDITOR
             if (EditorApplication.isPlaying)
             {
-                scene = SceneManager.CreateScene("newScene");
+                scene = SceneManager.CreateScene(sceneName);
 
                 SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
             }
             else
             {
                 scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
-                scene.name = "newScene";
+                scene.name = sceneName;
             }
 #else
             scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
@@ -44,6 +48,10 @@ namespace WinformsUnity
         {
             return unityObjectMap[id];
         }
+        protected Scene GetScene()
+        {
+            return scene;
+        }
         protected void SetObject(int id, UObject obj)
         {
             if (unityObjectMap.ContainsKey(id))
@@ -55,6 +63,7 @@ namespace WinformsUnity
                 unityObjectMap.Add(id, obj);
             }
         }
+
 
         Scene scene;
         Dictionary<int, UObject> unityObjectMap = new Dictionary<int, UObject>();
