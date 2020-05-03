@@ -148,6 +148,8 @@ public static class CodeGenerator
     }
     public static void AppendGameObjectComponents(GameObject gameObject, WriterUtil util, ref IndentedStringBuilder isb)
     {
+        
+        Debug.Log("fjriofjroijfroijfoiejrfoiwejfoiejfoiwjdoiejfoiejdfoiejfoierjoidwjoifjeroif");
         string name = gameObject.name.NormaliseString();
         //isb.AppendLineFormat("{0} = new GameObject();", name);
         //Dictionary<Type, int> componentTypeCounts = new Dictionary<Type, int>();
@@ -169,9 +171,14 @@ public static class CodeGenerator
             //isb.AppendLine("/*");
             foreach (MemberInfo member in members)
             {
+                if (member.Name == "tempStruct")
+                {
+                    Debug.Log("fjreiofjroi");
+                    int y = 5;
+                }
                 if (member.IgnoreMember())
                 {
-                    Debug.LogFormat("{0} is ignored.", member.Name);
+                    //Debug.LogFormat("{0} is ignored.", member.Name);
                     continue;
                 }
                 try
@@ -198,10 +205,9 @@ public static class CodeGenerator
                 }
                 catch (Exception err)
                 {
-                    Debug.LogFormat("ERROR:\n{0};", err);
+                    Debug.LogWarningFormat("ERROR:\n{0};\n\nStack Trace:\n{1}", err,err.StackTrace);
                 }
             }
-            //isb.AppendLineFormat("unityObjectMap[{0}] = {1};", c.GetInstanceID(), cname);
         }
 
     }
@@ -228,9 +234,13 @@ public static class CodeGenerator
         PropertyInfo propertyInfo = (PropertyInfo)member;
         return (!propertyInfo.CanWrite) || propertyInfo.GetAccessors().Any(x => x.IsStatic);
     }
+    public static bool IsStruct(this Type source)
+    {
+        return source.IsValueType && !source.IsPrimitive && !source.IsEnum;
+    }
     static string GetValueString(this object value,WriterUtil util)
     {
-        if (value is long || value is int || value is short)
+        if (value is long || value is int || value is short || value is uint || value is ulong || value is ushort)
         {
             return value.ToString();
         }
@@ -254,12 +264,12 @@ public static class CodeGenerator
         if (value is Vector3)
         {
             Vector3 vec3 = (Vector3)value;
-            return string.Format("new Vector3({0},{1},{2})", vec3.x.GetValueString(util), vec3.y.GetValueString(util),vec3.z.GetValueString(util));
+            return string.Format("new Vector3({0},{1},{2})", vec3.x.GetValueString(util), vec3.y.GetValueString(util), vec3.z.GetValueString(util));
         }
         if (value is Vector4)
         {
             Vector4 vec4 = (Vector4)value;
-            return string.Format("new Vector4({0},{1},{2},{3})", vec4.x.GetValueString(util), vec4.y.GetValueString(util), vec4.z.GetValueString(util),vec4.w.GetValueString(util));
+            return string.Format("new Vector4({0},{1},{2},{3})", vec4.x.GetValueString(util), vec4.y.GetValueString(util), vec4.z.GetValueString(util), vec4.w.GetValueString(util));
         }
         if (value is Matrix4x4)
         {
@@ -309,6 +319,40 @@ public static class CodeGenerator
                 isbElements.AppendFormat("{0}{1}", arr.GetValue(i).GetValueString(util), i < arr.Length - 1 ? ", " : "");
             }
             return string.Format("new {0}[] {{ {1} }}", elementType, isbElements.ToString());
+        }
+        if (type.IsStruct() || type.IsClass)
+        {
+            IndentedStringBuilder sbStruct = new IndentedStringBuilder();
+            string name = "tempStruct";
+            sbStruct.AppendLineFormat("{0} {1} = new {0}();",type,name);
+            MemberInfo[] members = type.GetMembers();
+            foreach(MemberInfo member in members)
+            {
+                if (member.MemberType == MemberTypes.Field)
+                {
+                    FieldInfo fieldInfo = (FieldInfo)member;
+                    if (!(fieldInfo.IsInitOnly || fieldInfo.IsStatic))
+                    {
+                        sbStruct.AppendLineFormat("{0}.{1} = {2};", name, member.Name, fieldInfo.GetValue(value).GetValueString(util));
+                    }
+                }
+                else if (member.MemberType == MemberTypes.Property)
+                {
+                    PropertyInfo propertyInfo = (PropertyInfo)member;
+                    if ( (propertyInfo.CanWrite) && (!propertyInfo.GetAccessors().Any(x => x.IsStatic)))
+                    {
+                        sbStruct.AppendLineFormat("{0}.{1} = {2};", name, member.Name, propertyInfo.GetValue(value).GetValueString(util));
+                    }
+                }
+            }
+            sbStruct.AppendLineFormat("return {0};", name);
+
+            IndentedStringBuilder sbStructFunc = new IndentedStringBuilder();
+            sbStructFunc.AppendLineFormat("new System.Func<{0}> (() => {{",type);
+            sbStructFunc.Indents = 1;
+            sbStructFunc.AppendLine(sbStruct.ToString());
+            sbStructFunc.Append("})()");
+            return sbStructFunc.ToString();
         }
         return string.Format("default({0})", type);
         //return value.ToString();
