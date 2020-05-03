@@ -225,34 +225,6 @@ public static class CodeGenerator
         PropertyInfo propertyInfo = (PropertyInfo)member;
         return (!propertyInfo.CanWrite) || propertyInfo.GetAccessors().Any(x => x.IsStatic);
     }
-    static string GetComponentName(Component c, WriterUtil util)
-    {
-        int instanceID = c.GetInstanceID();
-        string n;
-        if (util.ComponentNameStored(instanceID,out n))
-        {
-            return n;
-        }
-        else
-        {
-            Type t = c.GetType();
-            string gName = c.gameObject.name.NormaliseString();
-            string tName = Util.GetTypeName(t).NormaliseString();
-       
-            Component[] components = c.gameObject.GetComponents(t);
-            for(int i = 0; i < components.Length; i++)
-            {
-                Component component = components[i];
-                if (component == c)
-                {
-                    string cname = string.Format("{0}_{1}_{2}", gName, tName.NormaliseString(), i);
-                    util.AddComponentName(instanceID, cname);
-                    return cname;
-                }
-            }
-        }
-        return "e";
-    }
     static string GetValueString(this object value,WriterUtil util)
     {
         if (value is long || value is int || value is short)
@@ -298,6 +270,11 @@ public static class CodeGenerator
 
             return string.Format("new Rect({0},{1},{2},{3})", rect.x.GetValueString(util), rect.y.GetValueString(util), rect.width.GetValueString(util), rect.height.GetValueString(util));
         }
+        if (value is Quaternion)
+        {
+            Quaternion quat = (Quaternion)value;
+            return string.Format("new Quaternion({0},{1},{2},{3})",quat.x.GetValueString(util),quat.y.GetValueString(util),quat.z.GetValueString(util),quat.w.GetValueString(util));
+        }
         if (value is Scene)
         {
             return "scene";
@@ -337,30 +314,7 @@ public static class CodeGenerator
 
 public class WriterUtil
 {
-    Dictionary<int, string> componentNames = new Dictionary<int, string>();
     Dictionary<Type, int> componentTypeCounts = new Dictionary<Type, int>();
-    public void AddComponentName(int id, string name)
-    {
-        if (!componentNames.ContainsKey(id))
-        {
-            componentNames.Add(id,name);
-        }
-        else
-        {
-            componentNames[id] = name;
-            Debug.LogFormat("InstanceID \"{0}\" name reset.", id);
-        }
-    }
-    public bool ComponentNameStored(int id, out string name)
-    {
-        if (componentNames.ContainsKey(id))
-        {
-            name = componentNames[id];
-            return true;
-        }
-        name = "[name not found]";
-        return false;
-    }
     public int GetTypeCount(Type t,bool increment = true)
     {
         if (componentTypeCounts.ContainsKey(t))
