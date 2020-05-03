@@ -1,11 +1,11 @@
-
 using UnityEngine;
 using System.Collections;
+using WinformsUnity;
 
-public partial class newScene
+public partial class NewScene : BaseScene
 {
-    public newScene()
+    public NewScene() : base("New Scene")
     {
-        InitialiseComponent();
+        
     }
 }
