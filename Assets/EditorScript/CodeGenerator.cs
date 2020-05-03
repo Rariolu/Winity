@@ -54,16 +54,32 @@ public static class CodeGenerator
 
     static void AppendGameObjectsToMap(GameObject gameObject, IndentedStringBuilder isbObjectMap)
     {
-        isbObjectMap.AppendLineFormat("GameObject gameObject{0} = new GameObject();", gameObject.GetInstanceID());
-        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},gameObject{0});", gameObject.GetInstanceID());
+        int instID = gameObject.GetInstanceID();
+        string normInst = instID.Normalise();
+
+        isbObjectMap.AppendLineFormat("//{0}", gameObject.name);
+        isbObjectMap.AppendLineFormat("GameObject gameObject{0} = new GameObject();", normInst);
+        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},gameObject{0});", instID,normInst);
+
+        int transformInst = gameObject.transform.GetInstanceID();
+        string normTranInst = transformInst.Normalise();
+
+        isbObjectMap.AppendLineFormat("Transform transform{0} = gameObject{1}.transform;", normTranInst, normInst);
+        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},transform{0});", transformInst,normTranInst);
+
         Component[] components = gameObject.GetComponents<Component>();
         foreach(Component component in components)
         {
-            Type cType = component.GetType();
-            isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), component.GetInstanceID(), gameObject.GetInstanceID());
-            isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{0});", component.GetInstanceID());
+            if (!(component is Transform))
+            {
+                Type cType = component.GetType();
+                isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), component.GetInstanceID(), instID);
+                isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{0});", component.GetInstanceID());
+            }
         }
-        
+
+        isbObjectMap.AppendLine("");
+
         foreach(Transform child in gameObject.transform)
         {
             AppendGameObjectsToMap(child.gameObject, isbObjectMap);
@@ -88,6 +104,8 @@ public static class CodeGenerator
        
         SerialiseChildObjects(gameObject,util, ref isbFunction);
 
+        //isbFunction.AppendLineFormat("unityObjectMap[{0}] = {1};", gameObject.GetInstanceID(), name);
+
         isbFunction.AppendLineFormat("return {0};",name);
         isbFunction.Indents--;
         isbFunction.AppendLine("}");
@@ -95,45 +113,11 @@ public static class CodeGenerator
         function = isbFunction.ToString();
         functionCall = string.Format("{0} = {1}();", name, functionName);
     }
-    public static string NormaliseString(this string text)
-    {
-        return text.Replace('(', '_').Replace(')', '_').ToLowerCamelCase();
-    }
 
-    public static string ToUpperCamelCase(this string text)
-    {
-        string[] words = text.Replace('\n', ' ').Replace('\t', ' ').Split(' ');
-        StringBuilder sb = new StringBuilder();
-        foreach (string word in words)
-        {
-            char[] wordChars = word.ToLower().ToCharArray();
-            wordChars[0] = wordChars[0].ToUpper();
-            sb.Append(new string(wordChars));
-        }
-        return sb.ToString();
-    }
-
-    public static string ToLowerCamelCase(this string text)
-    {
-        string upperCamelCase = text.ToUpperCamelCase();
-        char[] chars = upperCamelCase.ToCharArray();
-        chars[0] = chars[0].ToLower();
-        return new string(chars);
-    }
-
-    static char ToLower(this char c)
-    {
-        return c.ToString().ToLower()[0];
-    }
-
-    static char ToUpper(this char c)
-    {
-        return c.ToString().ToUpper()[0];
-    }
 
     static void SerialiseChildObjects(GameObject gameObject, WriterUtil util, ref IndentedStringBuilder isb)
     {
-        AppendGameObject(gameObject,util, ref isb);
+        AppendGameObjectComponents(gameObject,util, ref isb);
 
         if (gameObject.transform.childCount > 0)
         {
@@ -143,21 +127,23 @@ public static class CodeGenerator
             string gameObjectName = gameObject.name.NormaliseString();
             foreach (Transform child in gameObject.transform)
             {
+                GameObject childObject = child.gameObject;
                 string name = child.name;
                 string normName = name.NormaliseString();
-                isb.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", normName, gameObject.GetInstanceID());
+                isb.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", normName, childObject.GetInstanceID());
                 //isb.AppendLineFormat("GameObject {0} = new GameObject();", normName);
                 isb.AppendLineFormat("{0}.name = \"{1}\";", normName, name);
                 isb.AppendLineFormat("{0}.tag = \"{1}\";", normName, child.tag);
-                isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", normName, gameObjectName);
-                SerialiseChildObjects(child.gameObject,util, ref isb);
+                //isb.AppendLineFormat("{0}.transform.parent = {1}.transform;", normName, gameObjectName);
+                SerialiseChildObjects(childObject,util, ref isb);
+                //isb.AppendLineFormat("unityObjectMap[{0}] = {1};", gameObject.GetInstanceID(), normName);
             }
 
             isb.Indents--;
             isb.AppendLine("}");
         }
     }
-    public static void AppendGameObject(GameObject gameObject, WriterUtil util, ref IndentedStringBuilder isb)
+    public static void AppendGameObjectComponents(GameObject gameObject, WriterUtil util, ref IndentedStringBuilder isb)
     {
         string name = gameObject.name.NormaliseString();
         //isb.AppendLineFormat("{0} = new GameObject();", name);
@@ -166,60 +152,57 @@ public static class CodeGenerator
         foreach(Component c in gameObject.GetComponents<Component>())
         {
             Type t = c.GetType();
-            if (t != typeof(Transform))
+            //if (t != typeof(Transform))
+            //{
+               
+            //    //isb.AppendLine("*/");
+            //}
+            string tName = Util.GetTypeName(t);
+            int comCount = util.GetTypeCount(t);
+            string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
+            //isb.AppendLineFormat("{0} {1} = {2}.GetComponent<{0}>();", t, cname, name);
+            isb.AppendLineFormat("{0} {1} = (unityObjectMap[{2}] as {0});", t, cname, c.GetInstanceID());
+            MemberInfo[] members = t.GetMembers();
+            //isb.AppendLine("/*");
+            foreach (MemberInfo member in members)
             {
-                string tName = GetTypeName(t);
-                int comCount = util.GetTypeCount(t);
-                string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
-                //isb.AppendLineFormat("{0} {1} = {2}.GetComponent<{0}>();", t, cname, name);
-                isb.AppendLineFormat("{0} {1} = (unityObjectMap[{2}] as {0});", t, cname, c.GetInstanceID());
-                MemberInfo[] members = t.GetMembers();
-                //isb.AppendLine("/*");
-                foreach(MemberInfo member in members)
+                if (member.IgnoreMember())
                 {
-                    if (member.IgnoreMember())
+                    Debug.LogFormat("{0} is ignored.", member.Name);
+                    continue;
+                }
+                try
+                {
+                    object value = null;
+                    if (member.MemberType == MemberTypes.Field)
                     {
-                        Debug.LogFormat("{0} is ignored.", member.Name);
-                        continue;
+                        FieldInfo fieldInfo = (FieldInfo)member;
+                        value = fieldInfo.GetValue(c);
                     }
-                    try
+                    else
                     {
-                        object value = null;
-                        if (member.MemberType == MemberTypes.Field)
-                        {
-                            FieldInfo fieldInfo = (FieldInfo)member;
-                            value = fieldInfo.GetValue(c);
-                        }
-                        else
-                        {
-                            PropertyInfo propertyInfo = (PropertyInfo)member;
-                            value = propertyInfo.GetValue(c);
-                        }
-                        if (value != null)
-                        {
-                            isb.AppendLineFormat("{0}.{1} = {2};", cname, member.Name, value.GetValueString(util));
-                        }
+                        PropertyInfo propertyInfo = (PropertyInfo)member;
+                        value = propertyInfo.GetValue(c);
                     }
-                    catch (Exception err)
+                    if (value != null)
                     {
-                        Debug.LogFormat("ERROR:\n{0};",err);
+                        isb.AppendLineFormat("{0}.{1} = {2};", cname, member.Name, value.GetValueString(util));
+                    }
+                    else
+                    {
+                        isb.AppendLineFormat("{0}.{1} = null;", cname, member.Name);
                     }
                 }
-                //isb.AppendLine("*/");
+                catch (Exception err)
+                {
+                    Debug.LogFormat("ERROR:\n{0};", err);
+                }
             }
+            //isb.AppendLineFormat("unityObjectMap[{0}] = {1};", c.GetInstanceID(), cname);
         }
 
     }
-    static string GetTypeName(Type t)
-    {
-        string tName = t.ToString();
-        int dotIndex = tName.LastIndexOf('.');
-        if (dotIndex > -1)
-        {
-            tName = tName.Substring(dotIndex + 1, tName.Length - (dotIndex + 1));
-        }
-        return tName;
-    }
+
     static bool IgnoreMember(this MemberInfo member)
     {
         if (member.MemberType != MemberTypes.Field && member.MemberType != MemberTypes.Property)
@@ -228,7 +211,8 @@ public static class CodeGenerator
         }
         bool isGameObject = member.Name == "gameObject";
         bool isTransform = isGameObject || member.Name == "transform";
-        bool isObsolete = isTransform || member.GetCustomAttributes(typeof(ObsoleteAttribute)).Count() > 0;
+        bool isName = isTransform || member.Name == "name";
+        bool isObsolete = isName || member.GetCustomAttributes(typeof(ObsoleteAttribute)).Count() > 0;
         if (isObsolete)
         {
             return true;
@@ -253,7 +237,7 @@ public static class CodeGenerator
         {
             Type t = c.GetType();
             string gName = c.gameObject.name.NormaliseString();
-            string tName = GetTypeName(t).NormaliseString();
+            string tName = Util.GetTypeName(t).NormaliseString();
        
             Component[] components = c.gameObject.GetComponents(t);
             for(int i = 0; i < components.Length; i++)
@@ -328,13 +312,6 @@ public static class CodeGenerator
         if (type.IsEnum)
         {
             return string.Format("{0}.{1}", type.ToString().Replace('+','.'), value);
-        }
-        if (type.IsClass)
-        {
-            if (value == null)
-            {
-                return "null";
-            }
         }
         if (value is UObject)
         {

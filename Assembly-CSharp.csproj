@@ -66,6 +66,7 @@
     <Compile Include="Assets\EditorScript\CodeGenerator.cs" />
     <Compile Include="Assets\EditorScript\IndentedStringBuilder.cs" />
     <Compile Include="Assets\EditorScript\TextFormats.cs" />
+    <Compile Include="Assets\EditorScript\Util.cs" />
     <Compile Include="Assets\ResourceManagement\Monobehaviours\ResourceLoader.cs" />
     <Compile Include="Assets\ResourceManagement\RescItem.cs" />
     <Compile Include="Assets\ResourceManagement\ResourceManager.cs" />

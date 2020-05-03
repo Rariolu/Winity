@@ -37,44 +37,58 @@ partial class phoenix
 
     void MapObjects()
     {
-		GameObject gameObject12548 = new GameObject();
-		unityObjectMap.Add(12548,gameObject12548);
-		UnityEngine.Transform component12554 = gameObject12548.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12554,component12554);
-		UnityEngine.Camera component12552 = gameObject12548.AddComponent<UnityEngine.Camera>();
-		unityObjectMap.Add(12552,component12552);
-		UnityEngine.AudioListener component12550 = gameObject12548.AddComponent<UnityEngine.AudioListener>();
-		unityObjectMap.Add(12550,component12550);
-		GameObject gameObject12542 = new GameObject();
-		unityObjectMap.Add(12542,gameObject12542);
-		UnityEngine.Transform component12546 = gameObject12542.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12546,component12546);
-		UnityEngine.Light component12544 = gameObject12542.AddComponent<UnityEngine.Light>();
-		unityObjectMap.Add(12544,component12544);
-		GameObject gameObject12538 = new GameObject();
-		unityObjectMap.Add(12538,gameObject12538);
-		UnityEngine.Transform component12540 = gameObject12538.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12540,component12540);
-		GameObject gameObject12518 = new GameObject();
-		unityObjectMap.Add(12518,gameObject12518);
-		UnityEngine.Transform component12520 = gameObject12518.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12520,component12520);
-		GameObject gameObject12522 = new GameObject();
-		unityObjectMap.Add(12522,gameObject12522);
-		UnityEngine.Transform component12524 = gameObject12522.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12524,component12524);
-		NewBehaviourScript1 component12526 = gameObject12522.AddComponent<NewBehaviourScript1>();
-		unityObjectMap.Add(12526,component12526);
-		GameObject gameObject12534 = new GameObject();
-		unityObjectMap.Add(12534,gameObject12534);
-		UnityEngine.Transform component12536 = gameObject12534.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12536,component12536);
-		GameObject gameObject12528 = new GameObject();
-		unityObjectMap.Add(12528,gameObject12528);
-		UnityEngine.Transform component12530 = gameObject12528.AddComponent<UnityEngine.Transform>();
-		unityObjectMap.Add(12530,component12530);
-		UnityEngine.AudioSource component12532 = gameObject12528.AddComponent<UnityEngine.AudioSource>();
-		unityObjectMap.Add(12532,component12532);
+		//Main Camera
+		GameObject gameObject13200 = new GameObject();
+		unityObjectMap.Add(13200,gameObject13200);
+		Transform transform13206 = gameObject13200.transform;
+		unityObjectMap.Add(13206,transform13206);
+		UnityEngine.Camera component13204 = gameObject13200.AddComponent<UnityEngine.Camera>();
+		unityObjectMap.Add(13204,component13204);
+		UnityEngine.AudioListener component13202 = gameObject13200.AddComponent<UnityEngine.AudioListener>();
+		unityObjectMap.Add(13202,component13202);
+		
+		//Directional Light
+		GameObject gameObject13194 = new GameObject();
+		unityObjectMap.Add(13194,gameObject13194);
+		Transform transform13198 = gameObject13194.transform;
+		unityObjectMap.Add(13198,transform13198);
+		UnityEngine.Light component13196 = gameObject13194.AddComponent<UnityEngine.Light>();
+		unityObjectMap.Add(13196,component13196);
+		
+		//deathToAmeri ca
+		GameObject gameObject13190 = new GameObject();
+		unityObjectMap.Add(13190,gameObject13190);
+		Transform transform13192 = gameObject13190.transform;
+		unityObjectMap.Add(13192,transform13192);
+		
+		//blep
+		GameObject gameObject13170 = new GameObject();
+		unityObjectMap.Add(13170,gameObject13170);
+		Transform transform13172 = gameObject13170.transform;
+		unityObjectMap.Add(13172,transform13172);
+		
+		//GameObject
+		GameObject gameObject13174 = new GameObject();
+		unityObjectMap.Add(13174,gameObject13174);
+		Transform transform13176 = gameObject13174.transform;
+		unityObjectMap.Add(13176,transform13176);
+		NewBehaviourScript1 component13178 = gameObject13174.AddComponent<NewBehaviourScript1>();
+		unityObjectMap.Add(13178,component13178);
+		
+		//GameObject (1)
+		GameObject gameObject13186 = new GameObject();
+		unityObjectMap.Add(13186,gameObject13186);
+		Transform transform13188 = gameObject13186.transform;
+		unityObjectMap.Add(13188,transform13188);
+		
+		//Audio Source
+		GameObject gameObject13180 = new GameObject();
+		unityObjectMap.Add(13180,gameObject13180);
+		Transform transform13182 = gameObject13180.transform;
+		unityObjectMap.Add(13182,transform13182);
+		UnityEngine.AudioSource component13184 = gameObject13180.AddComponent<UnityEngine.AudioSource>();
+		unityObjectMap.Add(13184,component13184);
+		
 
     }
 
@@ -84,10 +98,26 @@ partial class phoenix
 
 	private GameObject mainCamera_Init()
 	{
-		GameObject mainCamera = (unityObjectMap[12548] as GameObject);
+		GameObject mainCamera = (unityObjectMap[13200] as GameObject);
 		mainCamera.name = "Main Camera";
 		mainCamera.tag = "MainCamera";
-		UnityEngine.Camera mainCamera_camera_0 = (unityObjectMap[12552] as UnityEngine.Camera);
+		UnityEngine.Transform mainCamera_transform_0 = (unityObjectMap[13206] as UnityEngine.Transform);
+		mainCamera_transform_0.position = new Vector3(0f,1f,-10f);
+		mainCamera_transform_0.localPosition = new Vector3(0f,1f,-10f);
+		mainCamera_transform_0.eulerAngles = new Vector3(0f,0f,0f);
+		mainCamera_transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+		mainCamera_transform_0.right = new Vector3(1f,0f,0f);
+		mainCamera_transform_0.up = new Vector3(0f,1f,0f);
+		mainCamera_transform_0.forward = new Vector3(0f,0f,1f);
+		mainCamera_transform_0.rotation = default(UnityEngine.Quaternion);
+		mainCamera_transform_0.localRotation = default(UnityEngine.Quaternion);
+		mainCamera_transform_0.localScale = new Vector3(1f,1f,1f);
+		mainCamera_transform_0.parent = null;
+		mainCamera_transform_0.hasChanged = true;
+		mainCamera_transform_0.hierarchyCapacity = 1;
+		mainCamera_transform_0.tag = "MainCamera";
+		mainCamera_transform_0.hideFlags = UnityEngine.HideFlags.None;
+		UnityEngine.Camera mainCamera_camera_0 = (unityObjectMap[13204] as UnityEngine.Camera);
 		mainCamera_camera_0.nearClipPlane = 0.3f;
 		mainCamera_camera_0.farClipPlane = 1000f;
 		mainCamera_camera_0.fieldOfView = 60f;
@@ -122,6 +152,7 @@ partial class phoenix
 		mainCamera_camera_0.gateFit = UnityEngine.Camera.GateFitMode.Horizontal;
 		mainCamera_camera_0.rect = new Rect(0f,0f,1f,1f);
 		mainCamera_camera_0.pixelRect = new Rect(0f,0f,281f,158f);
+		mainCamera_camera_0.targetTexture = null;
 		mainCamera_camera_0.targetDisplay = 0;
 		mainCamera_camera_0.worldToCameraMatrix = new Matrix4x4(new Vector4(1f,0f,0f,0f),new Vector4(0f,1f,0f,0f),new Vector4(0f,0f,-1f,0f),new Vector4(0f,-1f,-10f,1f));
 		mainCamera_camera_0.projectionMatrix = new Matrix4x4(new Vector4(0.9738933f,0f,0f,0f),new Vector4(0f,1.732051f,0f,0f),new Vector4(0f,0f,-1.0006f,-1f),new Vector4(0f,0f,-0.60018f,0f));
@@ -133,22 +164,36 @@ partial class phoenix
 		mainCamera_camera_0.stereoTargetEye = UnityEngine.StereoTargetEyeMask.Both;
 		mainCamera_camera_0.enabled = true;
 		mainCamera_camera_0.tag = "MainCamera";
-		mainCamera_camera_0.name = "Main Camera";
 		mainCamera_camera_0.hideFlags = UnityEngine.HideFlags.None;
-		UnityEngine.AudioListener mainCamera_audiolistener_0 = (unityObjectMap[12550] as UnityEngine.AudioListener);
+		UnityEngine.AudioListener mainCamera_audiolistener_0 = (unityObjectMap[13202] as UnityEngine.AudioListener);
 		mainCamera_audiolistener_0.velocityUpdateMode = UnityEngine.AudioVelocityUpdateMode.Dynamic;
 		mainCamera_audiolistener_0.enabled = true;
 		mainCamera_audiolistener_0.tag = "MainCamera";
-		mainCamera_audiolistener_0.name = "Main Camera";
 		mainCamera_audiolistener_0.hideFlags = UnityEngine.HideFlags.None;
 		return mainCamera;
 	}
 	private GameObject directionalLight_Init()
 	{
-		GameObject directionalLight = (unityObjectMap[12542] as GameObject);
+		GameObject directionalLight = (unityObjectMap[13194] as GameObject);
 		directionalLight.name = "Directional Light";
 		directionalLight.tag = "Untagged";
-		UnityEngine.Light directionalLight_light_0 = (unityObjectMap[12544] as UnityEngine.Light);
+		UnityEngine.Transform directionalLight_transform_0 = (unityObjectMap[13198] as UnityEngine.Transform);
+		directionalLight_transform_0.position = new Vector3(0f,3f,0f);
+		directionalLight_transform_0.localPosition = new Vector3(0f,3f,0f);
+		directionalLight_transform_0.eulerAngles = new Vector3(50f,330f,0f);
+		directionalLight_transform_0.localEulerAngles = new Vector3(50f,330f,0f);
+		directionalLight_transform_0.right = new Vector3(0.8660254f,0f,0.4999999f);
+		directionalLight_transform_0.up = new Vector3(-0.3830222f,0.6427876f,0.6634139f);
+		directionalLight_transform_0.forward = new Vector3(-0.3213938f,-0.7660444f,0.5566705f);
+		directionalLight_transform_0.rotation = default(UnityEngine.Quaternion);
+		directionalLight_transform_0.localRotation = default(UnityEngine.Quaternion);
+		directionalLight_transform_0.localScale = new Vector3(1f,1f,1f);
+		directionalLight_transform_0.parent = null;
+		directionalLight_transform_0.hasChanged = true;
+		directionalLight_transform_0.hierarchyCapacity = 2;
+		directionalLight_transform_0.tag = "Untagged";
+		directionalLight_transform_0.hideFlags = UnityEngine.HideFlags.None;
+		UnityEngine.Light directionalLight_light_0 = (unityObjectMap[13196] as UnityEngine.Light);
 		directionalLight_light_0.type = UnityEngine.LightType.Directional;
 		directionalLight_light_0.spotAngle = 30f;
 		directionalLight_light_0.innerSpotAngle = 21.80208f;
@@ -165,6 +210,7 @@ partial class phoenix
 		directionalLight_light_0.useShadowMatrixOverride = false;
 		directionalLight_light_0.shadowMatrixOverride = new Matrix4x4(new Vector4(1f,0f,0f,0f),new Vector4(0f,1f,0f,0f),new Vector4(0f,0f,1f,0f),new Vector4(0f,0f,0f,1f));
 		directionalLight_light_0.range = 10f;
+		directionalLight_light_0.flare = null;
 		directionalLight_light_0.bakingOutput = default(UnityEngine.LightBakingOutput);
 		directionalLight_light_0.cullingMask = -1;
 		directionalLight_light_0.renderingLayerMask = 1;
@@ -176,56 +222,132 @@ partial class phoenix
 		directionalLight_light_0.shadowResolution = UnityEngine.Rendering.LightShadowResolution.FromQualitySettings;
 		directionalLight_light_0.layerShadowCullDistances = new System.Single[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
 		directionalLight_light_0.cookieSize = 10f;
+		directionalLight_light_0.cookie = null;
 		directionalLight_light_0.renderMode = UnityEngine.LightRenderMode.Auto;
 		directionalLight_light_0.areaSize = new Vector2(1f,1f);
 		directionalLight_light_0.lightmapBakeType = UnityEngine.LightmapBakeType.Realtime;
 		directionalLight_light_0.enabled = true;
 		directionalLight_light_0.tag = "Untagged";
-		directionalLight_light_0.name = "Directional Light";
 		directionalLight_light_0.hideFlags = UnityEngine.HideFlags.None;
 		{
-			GameObject deathtoameriCa = (unityObjectMap[12542] as GameObject);
+			GameObject deathtoameriCa = (unityObjectMap[13190] as GameObject);
 			deathtoameriCa.name = "deathToAmeri ca";
 			deathtoameriCa.tag = "Untagged";
-			deathtoameriCa.transform.parent = directionalLight.transform;
+			UnityEngine.Transform deathtoameriCa_transform_0 = (unityObjectMap[13192] as UnityEngine.Transform);
+			deathtoameriCa_transform_0.position = new Vector3(0f,3f,0f);
+			deathtoameriCa_transform_0.localPosition = new Vector3(0f,0f,0f);
+			deathtoameriCa_transform_0.eulerAngles = new Vector3(50f,330f,0f);
+			deathtoameriCa_transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+			deathtoameriCa_transform_0.right = new Vector3(0.8660254f,0f,0.4999999f);
+			deathtoameriCa_transform_0.up = new Vector3(-0.3830222f,0.6427876f,0.6634139f);
+			deathtoameriCa_transform_0.forward = new Vector3(-0.3213938f,-0.7660444f,0.5566705f);
+			deathtoameriCa_transform_0.rotation = default(UnityEngine.Quaternion);
+			deathtoameriCa_transform_0.localRotation = default(UnityEngine.Quaternion);
+			deathtoameriCa_transform_0.localScale = new Vector3(1f,1f,1f);
+			deathtoameriCa_transform_0.parent = (unityObjectMap[13198] as UnityEngine.Transform);
+			deathtoameriCa_transform_0.hasChanged = true;
+			deathtoameriCa_transform_0.hierarchyCapacity = 2;
+			deathtoameriCa_transform_0.tag = "Untagged";
+			deathtoameriCa_transform_0.hideFlags = UnityEngine.HideFlags.None;
 		}
 		return directionalLight;
 	}
 	private GameObject blep_Init()
 	{
-		GameObject blep = (unityObjectMap[12518] as GameObject);
+		GameObject blep = (unityObjectMap[13170] as GameObject);
 		blep.name = "blep";
 		blep.tag = "Untagged";
+		UnityEngine.Transform blep_transform_0 = (unityObjectMap[13172] as UnityEngine.Transform);
+		blep_transform_0.position = new Vector3(0f,0f,0f);
+		blep_transform_0.localPosition = new Vector3(0f,0f,0f);
+		blep_transform_0.eulerAngles = new Vector3(0f,0f,0f);
+		blep_transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+		blep_transform_0.right = new Vector3(1f,0f,0f);
+		blep_transform_0.up = new Vector3(0f,1f,0f);
+		blep_transform_0.forward = new Vector3(0f,0f,1f);
+		blep_transform_0.rotation = default(UnityEngine.Quaternion);
+		blep_transform_0.localRotation = default(UnityEngine.Quaternion);
+		blep_transform_0.localScale = new Vector3(1f,1f,1f);
+		blep_transform_0.parent = null;
+		blep_transform_0.hasChanged = true;
+		blep_transform_0.hierarchyCapacity = 4;
+		blep_transform_0.tag = "Untagged";
+		blep_transform_0.hideFlags = UnityEngine.HideFlags.None;
 		{
-			GameObject gameobject = (unityObjectMap[12518] as GameObject);
+			GameObject gameobject = (unityObjectMap[13174] as GameObject);
 			gameobject.name = "GameObject";
 			gameobject.tag = "Untagged";
-			gameobject.transform.parent = blep.transform;
-			NewBehaviourScript1 gameobject_newbehaviourscript1_0 = (unityObjectMap[12526] as NewBehaviourScript1);
+			UnityEngine.Transform gameobject_transform_0 = (unityObjectMap[13176] as UnityEngine.Transform);
+			gameobject_transform_0.position = new Vector3(0f,0f,0f);
+			gameobject_transform_0.localPosition = new Vector3(0f,0f,0f);
+			gameobject_transform_0.eulerAngles = new Vector3(0f,0f,0f);
+			gameobject_transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+			gameobject_transform_0.right = new Vector3(1f,0f,0f);
+			gameobject_transform_0.up = new Vector3(0f,1f,0f);
+			gameobject_transform_0.forward = new Vector3(0f,0f,1f);
+			gameobject_transform_0.rotation = default(UnityEngine.Quaternion);
+			gameobject_transform_0.localRotation = default(UnityEngine.Quaternion);
+			gameobject_transform_0.localScale = new Vector3(1f,1f,1f);
+			gameobject_transform_0.parent = (unityObjectMap[13172] as UnityEngine.Transform);
+			gameobject_transform_0.hasChanged = true;
+			gameobject_transform_0.hierarchyCapacity = 4;
+			gameobject_transform_0.tag = "Untagged";
+			gameobject_transform_0.hideFlags = UnityEngine.HideFlags.None;
+			NewBehaviourScript1 gameobject_newbehaviourscript1_0 = (unityObjectMap[13178] as NewBehaviourScript1);
 			gameobject_newbehaviourscript1_0.useGUILayout = true;
 			gameobject_newbehaviourscript1_0.runInEditMode = false;
 			gameobject_newbehaviourscript1_0.enabled = true;
 			gameobject_newbehaviourscript1_0.tag = "Untagged";
-			gameobject_newbehaviourscript1_0.name = "GameObject";
 			gameobject_newbehaviourscript1_0.hideFlags = UnityEngine.HideFlags.None;
 			gameobject_newbehaviourscript1_0.die = "die";
 			gameobject_newbehaviourscript1_0.rir = new System.Int32[] { 3, 76, 42 };
-			gameobject_newbehaviourscript1_0.testObj = (unityObjectMap[12548] as UnityEngine.GameObject);
-			gameobject_newbehaviourscript1_0.testObj2 = (unityObjectMap[12542] as UnityEngine.GameObject);
-			GameObject gameobject_1_ = (unityObjectMap[12518] as GameObject);
+			gameobject_newbehaviourscript1_0.testObj = (unityObjectMap[13200] as UnityEngine.GameObject);
+			GameObject gameobject_1_ = (unityObjectMap[13186] as GameObject);
 			gameobject_1_.name = "GameObject (1)";
 			gameobject_1_.tag = "Untagged";
-			gameobject_1_.transform.parent = blep.transform;
+			UnityEngine.Transform gameobject_1__transform_0 = (unityObjectMap[13188] as UnityEngine.Transform);
+			gameobject_1__transform_0.position = new Vector3(0f,0f,0f);
+			gameobject_1__transform_0.localPosition = new Vector3(0f,0f,0f);
+			gameobject_1__transform_0.eulerAngles = new Vector3(0f,0f,0f);
+			gameobject_1__transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+			gameobject_1__transform_0.right = new Vector3(1f,0f,0f);
+			gameobject_1__transform_0.up = new Vector3(0f,1f,0f);
+			gameobject_1__transform_0.forward = new Vector3(0f,0f,1f);
+			gameobject_1__transform_0.rotation = default(UnityEngine.Quaternion);
+			gameobject_1__transform_0.localRotation = default(UnityEngine.Quaternion);
+			gameobject_1__transform_0.localScale = new Vector3(1f,1f,1f);
+			gameobject_1__transform_0.parent = (unityObjectMap[13172] as UnityEngine.Transform);
+			gameobject_1__transform_0.hasChanged = true;
+			gameobject_1__transform_0.hierarchyCapacity = 4;
+			gameobject_1__transform_0.tag = "Untagged";
+			gameobject_1__transform_0.hideFlags = UnityEngine.HideFlags.None;
 			{
-				GameObject audioSource = (unityObjectMap[12534] as GameObject);
+				GameObject audioSource = (unityObjectMap[13180] as GameObject);
 				audioSource.name = "Audio Source";
 				audioSource.tag = "Untagged";
-				audioSource.transform.parent = gameobject_1_.transform;
-				UnityEngine.AudioSource audioSource_audiosource_0 = (unityObjectMap[12532] as UnityEngine.AudioSource);
+				UnityEngine.Transform audioSource_transform_0 = (unityObjectMap[13182] as UnityEngine.Transform);
+				audioSource_transform_0.position = new Vector3(0f,0f,0f);
+				audioSource_transform_0.localPosition = new Vector3(0f,0f,0f);
+				audioSource_transform_0.eulerAngles = new Vector3(0f,0f,0f);
+				audioSource_transform_0.localEulerAngles = new Vector3(0f,0f,0f);
+				audioSource_transform_0.right = new Vector3(1f,0f,0f);
+				audioSource_transform_0.up = new Vector3(0f,1f,0f);
+				audioSource_transform_0.forward = new Vector3(0f,0f,1f);
+				audioSource_transform_0.rotation = default(UnityEngine.Quaternion);
+				audioSource_transform_0.localRotation = default(UnityEngine.Quaternion);
+				audioSource_transform_0.localScale = new Vector3(1f,1f,1f);
+				audioSource_transform_0.parent = (unityObjectMap[13188] as UnityEngine.Transform);
+				audioSource_transform_0.hasChanged = true;
+				audioSource_transform_0.hierarchyCapacity = 4;
+				audioSource_transform_0.tag = "Untagged";
+				audioSource_transform_0.hideFlags = UnityEngine.HideFlags.None;
+				UnityEngine.AudioSource audioSource_audiosource_0 = (unityObjectMap[13184] as UnityEngine.AudioSource);
 				audioSource_audiosource_0.volume = 1f;
 				audioSource_audiosource_0.pitch = 1f;
 				audioSource_audiosource_0.time = 0f;
 				audioSource_audiosource_0.timeSamples = 0;
+				audioSource_audiosource_0.clip = null;
+				audioSource_audiosource_0.outputAudioMixerGroup = null;
 				audioSource_audiosource_0.loop = false;
 				audioSource_audiosource_0.ignoreListenerVolume = false;
 				audioSource_audiosource_0.playOnAwake = true;
@@ -248,7 +370,6 @@ partial class phoenix
 				audioSource_audiosource_0.rolloffMode = UnityEngine.AudioRolloffMode.Logarithmic;
 				audioSource_audiosource_0.enabled = true;
 				audioSource_audiosource_0.tag = "Untagged";
-				audioSource_audiosource_0.name = "Audio Source";
 				audioSource_audiosource_0.hideFlags = UnityEngine.HideFlags.None;
 			}
 		}
