@@ -32,13 +32,31 @@ namespace WinformsUnity
             scene.name = "newScene";
 #endif
             SceneManager.SetActiveScene(scene);
-            unityObjectMap = new Dictionary<int, UObject>();
+            
             MapObjects();
+            InitialiseGameObjects();
         }
 
         protected abstract void MapObjects();
+        protected abstract void InitialiseGameObjects();
+
+        protected UObject GetObject(int id)
+        {
+            return unityObjectMap[id];
+        }
+        protected void SetObject(int id, UObject obj)
+        {
+            if (unityObjectMap.ContainsKey(id))
+            {
+                unityObjectMap[id] = obj;
+            }
+            else
+            {
+                unityObjectMap.Add(id, obj);
+            }
+        }
 
         Scene scene;
-        protected Dictionary<int, UObject> unityObjectMap;
+        Dictionary<int, UObject> unityObjectMap = new Dictionary<int, UObject>();
     }
 }
