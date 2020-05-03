@@ -10,7 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{1A23700D-0AAF-95FE-0F55-0D06B7D380CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -67,6 +68,7 @@
     <Compile Include="Assets\EditorScript\IndentedStringBuilder.cs" />
     <Compile Include="Assets\EditorScript\TextFormats.cs" />
     <Compile Include="Assets\EditorScript\Util.cs" />
+    <Compile Include="Assets\EditorScript\WinformsUnity\BaseScene.cs" />
     <Compile Include="Assets\ResourceManagement\Monobehaviours\ResourceLoader.cs" />
     <Compile Include="Assets\ResourceManagement\RescItem.cs" />
     <Compile Include="Assets\ResourceManagement\ResourceManager.cs" />
