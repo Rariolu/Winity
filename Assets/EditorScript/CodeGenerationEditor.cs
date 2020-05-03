@@ -20,7 +20,7 @@ public class temp : ScriptableObject
     [MenuItem("Tools/CodeGenTest/Test")]
     static void Test()
     {
-        new newScene();//phoenix();
+        new NewScene();//phoenix();
     }
 
     [MenuItem("Tools/StringStuff/Test")]

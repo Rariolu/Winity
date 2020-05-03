@@ -18,7 +18,7 @@ public static class CodeGenerator
         string name = currentScene.name;
         GameObject[] rootObjects = currentScene.GetRootGameObjects();
         //string name = sceneName;
-        string mainFileText = string.Format(TextFormats.mainClassFileFormat, name.NormaliseString());
+        string mainFileText = string.Format(TextFormats.mainClassFileFormat, name.NormaliseString(false),name);
 
         IndentedStringBuilder isbVariables = new IndentedStringBuilder();
         isbVariables.Indents = 1;
@@ -48,9 +48,9 @@ public static class CodeGenerator
             isbVariables.AppendLineFormat("GameObject {0};", gameObject.name.NormaliseString());
             isbFunctions.Append(function,false);
         }
-        string designerText = string.Format(TextFormats.designerClassFileFormat, name.NormaliseString(), isbFunctionCalls.ToString(), isbObjectMap.ToString(),  isbFunctions.ToString(), isbVariables.ToString());
+        string designerText = string.Format(TextFormats.designerClassFileFormat, name.NormaliseString(false), isbObjectMap.ToString(), isbFunctionCalls.ToString(), isbFunctions.ToString(), isbVariables.ToString());
         File.WriteAllText(mainFileDir, mainFileText);
-        File.WriteAllText(designerFileDir, designerText);//isbDesigner.ToString());
+        File.WriteAllText(designerFileDir, designerText);
     }
 
     static void AppendGameObjectsToMap(GameObject gameObject, IndentedStringBuilder isbObjectMap)
@@ -60,13 +60,13 @@ public static class CodeGenerator
 
         isbObjectMap.AppendLineFormat("//{0}", gameObject.name);
         isbObjectMap.AppendLineFormat("GameObject gameObject{0} = new GameObject();", normInst);
-        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0}, gameObject{1});", instID, normInst);
+        isbObjectMap.AppendLineFormat("SetObject({0}, gameObject{1});", instID, normInst);
 
         int transformInst = gameObject.transform.GetInstanceID();
         string normTranInst = transformInst.Normalise();
 
         isbObjectMap.AppendLineFormat("Transform transform{0} = gameObject{1}.transform;", normTranInst, normInst);
-        isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},transform{1});", transformInst,normTranInst);
+        isbObjectMap.AppendLineFormat("SetObject({0},transform{1});", transformInst,normTranInst);
 
         Component[] components = gameObject.GetComponents<Component>();
         foreach(Component component in components)
@@ -77,7 +77,7 @@ public static class CodeGenerator
                 string comInstNorm = comInst.Normalise();
                 Type cType = component.GetType();
                 isbObjectMap.AppendLineFormat("{0} component{1} = gameObject{2}.AddComponent<{0}>();", cType.ToString(), comInstNorm, normInst);
-                isbObjectMap.AppendLineFormat("unityObjectMap.Add({0},component{1});", comInst ,comInstNorm);
+                isbObjectMap.AppendLineFormat("SetObject({0},component{1});", comInst ,comInstNorm);
             }
         }
 
@@ -100,7 +100,7 @@ public static class CodeGenerator
         isbFunction.AppendLine("{");
         isbFunction.Indents++;
 
-        isbFunction.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", name, gameObject.GetInstanceID());
+        isbFunction.AppendLineFormat("GameObject {0} = (GetObject({1}) as GameObject);", name, gameObject.GetInstanceID());
         //isbFunction.AppendLineFormat("GameObject {0} = new GameObject();",name);
         isbFunction.AppendLineFormat("{0}.name = \"{1}\";",name, gameObject.name);
         isbFunction.AppendLineFormat("{0}.tag = \"{1}\";", name, gameObject.tag);
@@ -133,7 +133,7 @@ public static class CodeGenerator
                 GameObject childObject = child.gameObject;
                 string name = child.name;
                 string normName = name.NormaliseString();
-                isb.AppendLineFormat("GameObject {0} = (unityObjectMap[{1}] as GameObject);", normName, childObject.GetInstanceID());
+                isb.AppendLineFormat("GameObject {0} = (GetObject({1}) as GameObject);", normName, childObject.GetInstanceID());
                 //isb.AppendLineFormat("GameObject {0} = new GameObject();", normName);
                 isb.AppendLineFormat("{0}.name = \"{1}\";", normName, name);
                 isb.AppendLineFormat("{0}.tag = \"{1}\";", normName, child.tag);
@@ -164,7 +164,7 @@ public static class CodeGenerator
             int comCount = util.GetTypeCount(t);
             string cname = string.Format("{0}_{1}_{2}", name, tName.NormaliseString(), comCount);
             //isb.AppendLineFormat("{0} {1} = {2}.GetComponent<{0}>();", t, cname, name);
-            isb.AppendLineFormat("{0} {1} = (unityObjectMap[{2}] as {0});", t, cname, c.GetInstanceID());
+            isb.AppendLineFormat("{0} {1} = (GetObject({2}) as {0});", t, cname, c.GetInstanceID());
             MemberInfo[] members = t.GetMembers();
             //isb.AppendLine("/*");
             foreach (MemberInfo member in members)
@@ -280,7 +280,7 @@ public static class CodeGenerator
         }
         if (value is Scene)
         {
-            return "scene";
+            return "GetScene()";
         }
         if (value is Color)
         {
@@ -297,7 +297,7 @@ public static class CodeGenerator
         {
             Debug.Log("fjriofjroijf");
             UObject obj = value as UObject;
-            return string.Format("(unityObjectMap[{0}] as {1})", obj.GetInstanceID(), type.ToString());
+            return string.Format("(GetObject({0}) as {1})", obj.GetInstanceID(), type.ToString());
         }
         if (type.IsArray)
         {
