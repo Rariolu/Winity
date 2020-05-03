@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 public static class TextFormats
 {
     #region MainClassFileFormat
-    public const string mainClassFileFormat = @"
-using UnityEngine;
+    public const string mainClassFileFormat = 
+@"using UnityEngine;
 using System.Collections;
+using WinformsUnity;
 
-public partial class {0}
+public partial class {0} : BaseScene
 {{
-    public {0}()
+    public {0}() : base(""{1}"")
     {{
-        InitialiseComponent();
+        
     }}
 }}
 ";
@@ -23,8 +24,8 @@ public partial class {0}
     #endregion
 
     #region DesignerClassFileFormat
-    public const string designerClassFileFormat = @"
-using System.Collections.Generic;
+    public const string designerClassFileFormat = 
+@"using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
@@ -32,53 +33,26 @@ using UnityEditor.SceneManagement;
 
 partial class {0}
 {{
-    #region GeneratedCode
+    #region ObjectMapping
 
-    private void InitialiseComponent()
+    protected override void MapObjects()
     {{
-#if UNITY_EDITOR
-        if (EditorApplication.isPlaying)
-        {{
-            scene = SceneManager.CreateScene(""{0}"");
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        }}
-        else
-        {{
-            scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
-            scene.name = ""{0}"";
-        }}
-#else
-        scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
-        scene.name = ""{0}"";
-#endif
-        SceneManager.SetActiveScene(scene);
-
-        unityObjectMap = new Dictionary<int, Object>();
-        MapObjects();
-      
 {1}
     }}
 
     #endregion
 
-    #region ObjectMapping
-
-    void MapObjects()
+    #region GameObjectFunctions
+    protected override void InitialiseGameObjects()
     {{
 {2}
     }}
-
-    #endregion
-
-    #region GameObjectFunctions
 
 {3}
     #endregion
 
     #region Variables
 
-    Scene scene;
-    Dictionary<int,Object> unityObjectMap;
 {4}
     #endregion
 }}
