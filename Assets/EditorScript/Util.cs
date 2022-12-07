@@ -3,18 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+
+public enum Casing
+{
+    lowerCamelCase,
+    UpperCamelCase
+}
 
 public static class Util
 {
+    public static bool IsPrefab(this GameObject gameObject)
+    {
+        return gameObject.scene.rootCount == 0;
+    }
+
     public static string Normalise(this object obj)
     {
         return obj.ToString().NormaliseString();
     }
-    
-    public static string NormaliseString(this string text, bool lowerCamel = true)
+
+    public static string NormaliseString(this string text,Casing casing = Casing.lowerCamelCase)// bool lowerCamel = true)
     {
-        string replacedChars = text.Replace('(', '_').Replace(')', '_').Replace('-', '_');
-        return lowerCamel ? replacedChars.ToLowerCamelCase() : replacedChars.ToUpperCamelCase();
+        string replacedChars = text.Replace('(', '_').Replace(')', '_').Replace('-', '_').Replace('.', '_');
+        return casing == Casing.lowerCamelCase ? replacedChars.ToLowerCamelCase() : replacedChars.ToUpperCamelCase();
     }
 
     public static string ToUpperCamelCase(this string text)
@@ -24,8 +36,11 @@ public static class Util
         foreach (string word in words)
         {
             char[] wordChars = word.ToLower().ToCharArray();
-            wordChars[0] = wordChars[0].ToUpper();
-            sb.Append(new string(wordChars));
+            if (wordChars.Length > 0)
+            {
+                wordChars[0] = wordChars[0].ToUpper();
+                sb.Append(new string(wordChars));
+            }
         }
         return sb.ToString();
     }
