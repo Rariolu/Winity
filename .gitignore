@@ -84,3 +84,4 @@ UnityEditor.UI.csproj
 UnityEngine.UI.csproj
 
 Assets/Scripts/Result
+Assets/Scripts/NewBehaviourScript1.cs
