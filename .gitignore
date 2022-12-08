@@ -85,3 +85,5 @@ UnityEngine.UI.csproj
 
 Assets/Scripts/Result
 Assets/Scripts/NewBehaviourScript1.cs
+
+*.sln
