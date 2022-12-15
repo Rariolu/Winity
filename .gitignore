@@ -89,3 +89,8 @@ sysinfo.txt
 *.sln
 WinityUnityProject/ProjectSettings/EditorBuildSettings.asset
 WinityUnityProject/ProjectSettings/EditorSettings.asset
+
+
+WinityEditorLib/bin/Debug/*.dll
+WinityEditorLib/bin/Debug/*.xml
+WinityEditorLib/obj/Debug

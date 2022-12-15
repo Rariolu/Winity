@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{1A23700D-0AAF-95FE-0F55-0D06B7D380CF}</ProjectGuid>
+    <ProjectGuid>{8B66CD33-03A5-3D80-A210-BEC8AE7FB359}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -53,29 +53,22 @@
     <UnityVersion>2020.3.8f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Scripts\Result\NewScene1.designer.cs" />
-    <Compile Include="Assets\EditorScript\WinformsUnity\MemberWrapping\FieldWrapper.cs" />
     <Compile Include="Assets\EditorScript\SceneFileParsing\SceneFileLoad.cs" />
-    <Compile Include="Assets\EditorScript\SceneCodeGenerator.cs" />
-    <Compile Include="Assets\EditorScript\WinformsUnity\MemberWrapping\MemberWrapper.cs" />
-    <Compile Include="Assets\EditorScript\CodeGenerator.cs" />
-    <Compile Include="Assets\EditorScript\PrefabCodeGenerator.cs" />
-    <Compile Include="Assets\EditorScript\WinformsUnity\MemberWrapping\PropertyWrapper.cs" />
-    <Compile Include="Assets\EditorScript\WinformsUnity\Prefab.cs" />
-    <Compile Include="Assets\EditorScript\IndentedStringBuilder.cs" />
     <Compile Include="Assets\Scripts\Result\Other.designer.cs" />
     <Compile Include="Assets\Scripts\Result\NewScene.designer.cs" />
     <Compile Include="Assets\Scripts\Result\NewScene.cs" />
-    <Compile Include="Assets\EditorScript\Util.cs" />
     <Compile Include="Assets\Scripts\Result\Other.cs" />
     <Compile Include="Assets\EditorScript\CodeGenerationEditor.cs" />
-    <Compile Include="Assets\EditorScript\WinformsUnity\BaseScene.cs" />
-    <Compile Include="Assets\EditorScript\TextFormats.cs" />
     <Compile Include="Assets\Scripts\NewBehaviourScript1.cs" />
     <Compile Include="Assets\Scripts\Result\NewScene1.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Lib\SharpYaml.dll" />
+     <None Include="Assets\Lib\WinityEditorLib.dll" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.8f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -300,6 +293,9 @@
     </Reference>
     <Reference Include="SharpYaml">
       <HintPath>Assets\Lib\SharpYaml.dll</HintPath>
+    </Reference>
+    <Reference Include="WinityEditorLib">
+      <HintPath>Assets\Lib\WinityEditorLib.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.8f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
